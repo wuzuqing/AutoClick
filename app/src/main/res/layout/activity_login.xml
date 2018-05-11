@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:paddingLeft="24dp"
+              android:paddingRight="24dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="激活码:  "
+            android:textSize="14sp"
+            />
+
+        <EditText
+            android:id="@+id/et_jhm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_bg1"
+            android:hint="请输入激活码"
+            android:padding="8dp"
+            android:textColor="#333333"
+            android:textColorHint="#666666"
+            android:textSize="14sp"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_jhm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="激活"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_ty_over"
+        android:visibility="gone"
+        android:textSize="16sp"
+        android:text="您的体验时间已到,请\n输入激活码完成激活"
+        android:textColor="#f00"
+        />
+
+    <Button
+        android:id="@+id/btn_ty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="免费体验30分钟"
+        />
+</LinearLayout>
