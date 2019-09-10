@@ -17,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.os.AsyncTaskCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -192,7 +191,7 @@ public class ScreenCapture {
         } else {
             if (isAsyn) {
                 SaveTask mSaveTask = new SaveTask();
-                AsyncTaskCompat.executeParallel(mSaveTask, image);
+//                AsyncTaskCompat.executeParallel(mSaveTask, image);
             } else {
                 try {
                     Thread.sleep(time);
