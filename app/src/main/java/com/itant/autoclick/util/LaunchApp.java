@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
@@ -17,6 +18,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.virtualapp.home.LoadingActivity;
 
 /**
  * @author 吴祖清
@@ -45,15 +48,13 @@ public class LaunchApp {
     }
     //跳转页面的方法
     public static void launchapp(Context context,String packageName) {
-        APP_PACKAGE_NAME = packageName;
-        //判断当前手机是否有要跳入的app
-        if (isAppInstalled(context, APP_PACKAGE_NAME)) {
-            //如果有根据包名跳转
-            context.startActivity(context.getPackageManager().getLaunchIntentForPackage(APP_PACKAGE_NAME));
-        } else {
-            //如果没有，走进入系统商店找到这款APP，提示你去下载这款APP的程序
-            goToMarket(context, APP_PACKAGE_NAME);
+        String packageName1 = SPUtils.getString("packageName");
+        if (TextUtils.isEmpty(packageName1)) {
+            packageName1 = packageName;
         }
+        APP_PACKAGE_NAME = packageName1;
+
+        LoadingActivity.launch(context, packageName1, 0);
     }
 
     //这里是进入应用商店，下载指定APP的方法。

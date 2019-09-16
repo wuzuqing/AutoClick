@@ -24,15 +24,15 @@
     "key": "LOGIN_GAME",
     "name": "登录",
     "normalColor": "#CC275F",
-    "x": 759,
-    "y": 1028
+    "x": 281,
+    "y": 1128
   },
   {
     "key": "START_GAME",
     "name": "进入游戏",
-    "normalColor": "#9F5208",
-    "x": 697,
-    "y": 1472
+    "normalColor": "#DCB97E",
+    "x": 604,
+    "y": 1553
   },
   {
     "key": "GEN_XIN",
@@ -44,9 +44,9 @@
   {
     "key": "DIALOG_CLOSE2",
     "name": "通告对话框关闭",
-    "normalColor": "#F2D847",
-    "x": 968,
-    "y": 398
+    "normalColor": "#D5BE3F",
+    "x": 979,
+    "y": 458
   },
   {
     "key": "NET_CLOSE",
@@ -86,23 +86,23 @@
   {
     "key": "BUSINESS",
     "name": "商业",
-    "normalColor": "#710301",
-    "x": 908,
-    "y": 681
+    "normalColor": "#560100",
+    "x": 890,
+    "y": 753
   },
   {
     "key": "AGRICULTURAL",
     "name": "农业",
-    "normalColor": "#730201",
-    "x": 894,
-    "y": 1144
+    "normalColor": "#600100",
+    "x": 889,
+    "y": 1249
   },
   {
     "key": "SOLDIERS",
     "name": "士兵",
-    "normalColor": "#9A0804",
-    "x": 920,
-    "y": 1600
+    "normalColor": "#640100",
+    "x": 897,
+    "y": 1744
   },
   {
     "key": "SHI_YE",
@@ -128,72 +128,72 @@
   {
     "key": "HUANG_GONG",
     "name": "皇宫",
-    "normalColor": "#ABBCB3",
-    "x": 579,
-    "y": 655
+    "normalColor": "#BBA978",
+    "x": 759,
+    "y": 731
   },
   {
     "key": "HUANG_GONG_WANG",
     "name": "摄政王",
-    "normalColor": "#E5CA75",
-    "x": 551,
-    "y": 441
+    "normalColor": "#A37251",
+    "x": 511,
+    "y": 288
   },
   {
     "key": "HUANG_GONG_GET",
     "name": "俸禄",
-    "normalColor": "#D02600",
-    "x": 871,
-    "y": 1668
+    "normalColor": "#D32C00",
+    "x": 921,
+    "y": 1864
   },
   {
     "key": "PAI_HANG_BANG",
     "name": "排行榜",
-    "normalColor": "#4A4B41",
-    "x": 261,
-    "y": 1423
+    "normalColor": "#3B2421",
+    "x": 477,
+    "y": 1528
   },
   {
     "key": "BANG_DAN_SELF",
     "name": "本服榜单",
-    "normalColor": "#694021",
-    "x": 592,
-    "y": 732
+    "normalColor": "#2F0C02",
+    "x": 547,
+    "y": 846
   },
   {
     "key": "BANG_DAN_CROSS",
     "name": "跨服榜单",
-    "normalColor": "#C97735",
-    "x": 581,
-    "y": 1300
+    "normalColor": "#CBAF6C",
+    "x": 566,
+    "y": 1360
   },
   {
     "key": "BANG_DAN_SHI_LI",
     "name": "势力榜",
-    "normalColor": "#543619",
+    "normalColor": "#86592B",
     "x": 248,
-    "y": 319
+    "y": 362
   },
   {
     "key": "BANG_DAN_GUAN_KA",
     "name": "关卡榜",
-    "normalColor": "#A9B7BF",
-    "x": 492,
-    "y": 328
+    "normalColor": "#545E70",
+    "x": 534,
+    "y": 370
   },
   {
     "key": "BANG_DAN_QIN_MI",
     "name": "亲密榜",
-    "normalColor": "#BCCED5",
-    "x": 710,
-    "y": 337
+    "normalColor": "#5E697B",
+    "x": 804,
+    "y": 379
   },
   {
     "key": "BANG_DAN_GET",
     "name": "膜拜",
-    "normalColor": "#D53300",
-    "x": 885,
-    "y": 1481
+    "normalColor": "#C62501",
+    "x": 799,
+    "y": 1569
   },
   {
     "key": "GUAN_KA",
@@ -383,9 +383,9 @@
   {
     "key": "ACADEMY",
     "name": "书院",
-    "normalColor": "#404543",
-    "x": 508,
-    "y": 911
+    "normalColor": "#464237",
+    "x": 757,
+    "y": 980
   },
 
   {
@@ -419,9 +419,9 @@
   {
     "key": "ACADEMY_GET_OK",
     "name": "门客确定",
-    "normalColor": "#1D3456",
-    "x": 916,
-    "y": 559
+    "normalColor": "#12223B",
+    "x": 894,
+    "y": 613
   },
   {
     "key": "ACADEMY_ONE_KEY",

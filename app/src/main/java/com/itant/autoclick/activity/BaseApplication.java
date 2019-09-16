@@ -1,6 +1,5 @@
 package com.itant.autoclick.activity;
 
-import android.app.Application;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
@@ -12,6 +11,8 @@ import com.itant.autoclick.util.OkHttpClientManager;
 import com.itant.autoclick.util.SPUtils;
 import com.itant.autoclick.util.Util;
 
+import io.virtualapp.VApp;
+
 /**
  * @author 吴祖清
  * @version $Rev$
@@ -22,7 +23,7 @@ import com.itant.autoclick.util.Util;
  * @updateDes ${TODO}
  */
 
-public class BaseApplication extends Application {
+public class BaseApplication extends VApp {
     private static Context mApplication;
     private static int sStatusBarHeight;
 
@@ -31,7 +32,14 @@ public class BaseApplication extends Application {
     public static void setStatusBarHeight(int statusBarHeight) {
         sStatusBarHeight = statusBarHeight;
     }
+    private static boolean isShowPanel;
+    public static boolean isShowPanel() {
+        return isShowPanel;
+    }
 
+    public static void setIsShowPanel(boolean isShowPanel) {
+        BaseApplication.isShowPanel = isShowPanel;
+    }
 
     @Override
     public void onCreate() {

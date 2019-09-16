@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ import com.itant.autoclick.util.TaskUtil;
 import com.itant.autoclick.util.ToastUitl;
 import com.itant.autoclick.util.Util;
 
+import io.virtualapp.home.LoadingActivity;
+
 
 public class MainService extends Service {
 
@@ -36,7 +39,7 @@ public class MainService extends Service {
     private WindowManager.LayoutParams params;
     private WindowManager windowManager;
 
-//    private ScreenBroadcastReceiver mScreenBroadcastReceiver;
+    //    private ScreenBroadcastReceiver mScreenBroadcastReceiver;
     //状态栏高度.
     private int statusBarHeight = -1;
 
@@ -54,6 +57,7 @@ public class MainService extends Service {
         TaskUtil.isNewApi = Build.VERSION.SDK_INT >= 21;
         isTy = SPUtils.getBoolean(Constant.Login.IS_TY);
 //        mScreenBroadcastReceiver = new ScreenBroadcastReceiver();
+        BaseApplication.setIsShowPanel(true);
         startScreenBroadcastReceiver();
     }
 
@@ -176,8 +180,11 @@ public class MainService extends Service {
         toucherLayout.findViewById(R.id.tvLaunch).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                LaunchApp.launchapp(MainService.this, LaunchApp.JPZMG_PACKAGE_NAME);
+                String packageName = SPUtils.getString("packageName");
+                if (TextUtils.isEmpty(packageName)) {
+                    packageName = LaunchApp.JPZMG_PACKAGE_NAME;
+                }
+                LoadingActivity.launch(MainService.this, packageName, 0);
             }
         });
         toucherLayout.findViewById(R.id.tvUpgrade).setOnClickListener(new View.OnClickListener() {
@@ -269,7 +276,7 @@ public class MainService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.hasExtra("action")) {
             String action = intent.getStringExtra("action");
-            if ("ACTION_BOOT_COMPLETED".equals(action) || "com.g.android.RING".equals(action) ) {
+            if ("ACTION_BOOT_COMPLETED".equals(action) || "com.g.android.RING".equals(action)) {
                 llPanel.setVisibility(View.GONE);
                 tvShowOrHide.setText("显示");
                 xiaoHao(true);
@@ -280,7 +287,7 @@ public class MainService extends Service {
 
     private void xiaoHao(boolean some) {
         Util.isWPZMGServiceRunning = !Util.isWPZMGServiceRunning;
-        Intent intent2 = new Intent(MainService.this,   WPZMGService2.class );
+        Intent intent2 = new Intent(MainService.this, WPZMGService2.class);
         if (!Util.isWPZMGServiceRunning) {
             intent2.putExtra("stop", true);
             Util.setResLastTime(0);
@@ -298,10 +305,12 @@ public class MainService extends Service {
 //            mScreenBroadcastReceiver = null;
 //        }
         super.onDestroy();
+        BaseApplication.setIsShowPanel(false);
     }
 
     public static void start(Activity context) {
         Intent intent = new Intent(context, MainService.class);
+        context.stopService(intent);
         context.startService(intent);
         context.finish();
     }

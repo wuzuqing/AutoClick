@@ -27,6 +27,8 @@ import com.itant.autoclick.util.Util;
 
 import java.util.List;
 
+import io.virtualapp.AutoClick;
+
 public class WPZMGService2 extends Service implements Constant {
 
     private List<TaskModel> tasks;
@@ -169,8 +171,12 @@ public class WPZMGService2 extends Service implements Constant {
                 Util.refreshNextDayTime();
                 int count = 0;
                 while (true) { //循环执行小号操作
-                    SuUtil.kill();       //退出游戏
-
+//                    SuUtil.kill();       //退出游戏
+                    AutoClick.keyEvent(4);
+                    Thread.sleep(1200);
+                    // 009688
+                    AutoClick.click(899,1117);
+                    Thread.sleep(1000);
                     if (TaskUtil.bitmap != null && !TaskUtil.bitmap.isRecycled()) {
                         TaskUtil.bitmap.recycle();
                         TaskUtil.bitmap = null;

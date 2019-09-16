@@ -215,8 +215,11 @@ public class Util implements Constant {
         return sTaskModelList;
     }
 
-    private static String sDefUserInfo = "ck52434333,520333&ck83250887,520333&ck84012149,520333&ck75077701,520333&ck74266770," + "520333&ck56270983,520333&ck41351036," +
-            "520333&ck97381288,520333&ck68721497,520333&ck99371248,520333&ck21627506," + "520333&ck69539153,520333&ck82369145,520333&ck19656822,520333&ck92984644,520333";
+    private static String sDefUserInfo =
+//            "ck52434333,520333&ck83250887,520333&ck84012149,520333&ck75077701,520333&ck74266770,520333&" +
+//            "ck56270983,520333&ck41351036,520333&" +
+//            "ck97381288,520333&ck68721497,520333&ck99371248,520333&ck21627506,520333&" +
+                    "ck69539153,520333&ck82369145,520333&ck19656822,520333&ck92984644,520333";
     public static long nextDayTime;
 
     public static void init() {
@@ -241,7 +244,7 @@ public class Util implements Constant {
             for (GuanKaPoint point : points) {
                 DbCore.getDaoSession().getGuanKaPointDao().insertOrReplace(point);
             }
-            LogUtils.logd("points:" + points.toString());
+//            LogUtils.logd("points:" + points.toString());
         }
 
     }

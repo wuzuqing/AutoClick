@@ -1,19 +1,11 @@
 package com.itant.autoclick.tool;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.PowerManager;
-import android.util.DisplayMetrics;
-import android.util.Log;
-
-import com.itant.autoclick.activity.BaseApplication;
 import com.itant.autoclick.model.PointModel;
 import com.itant.autoclick.util.CmdData;
 import com.itant.autoclick.util.LogUtils;
 
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -35,7 +27,7 @@ public class AutoTool {
             // 申请获取root权限，这一步很重要，不然会没有作用
             boolean root = isRoot();
 
-            Process process = Runtime.getRuntime().exec("su");
+            Process process = Runtime.getRuntime().exec("sh");
             // 获取输出流
             OutputStream outputStream = process.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
@@ -149,7 +141,7 @@ public class AutoTool {
 
     public static void execShellCmd(int length, int key) throws InterruptedException {
         for (int i = 0; i < length; i++) {
-            Thread.sleep(120);
+            Thread.sleep(200);
             AutoTool.execShellCmd("input keyevent " + key); //
         }
     }

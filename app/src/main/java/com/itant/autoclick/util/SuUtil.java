@@ -1,5 +1,9 @@
 package com.itant.autoclick.util;
 
+import android.text.TextUtils;
+
+import com.lody.virtual.client.core.VirtualCore;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -30,9 +34,14 @@ public class SuUtil {
      * 结束进程,执行操作调用即可
      */
     public static void kill(String packageName) {
-        initProcess();
-        killProcess(packageName);
-        close();
+        String packageName1 = SPUtils.getString("packageName");
+        if (TextUtils.isEmpty(packageName1)) {
+            packageName1 = packageName;
+        }
+        VirtualCore.get().killAllApps();
+//        initProcess();
+//        killProcess(packageName);
+//        close();
     }
 
     /**

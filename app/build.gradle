@@ -21,7 +21,10 @@ android {
 
         applicationId "com.itant.autoclick"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 22
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a"
+        }
     }
 
     buildTypes {
@@ -37,33 +40,59 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    android {
+        lintOptions {
+            checkReleaseBuilds false
+            // Or, if you prefer, you can continue to check for errors in release builds,
+            // but continue the build even when errors are found:
+            abortOnError false
+        }
+    }
 }
 
+    dependencies {
+        implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.github.bumptech.glide:glide:3.6.1'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    implementation 'com.squareup.okio:okio:1.13.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+        implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+        implementation 'com.github.bumptech.glide:glide:3.6.1'
+        implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+        implementation 'com.squareup.okio:okio:1.13.0'
+        implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 //    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    //    compile 'com.rmtheis:tess-two:6.0.0'
+        //    compile 'com.rmtheis:tess-two:6.0.0'
 //    compile files('libs/AndroidScreenCap.jar')
-    implementation 'org.greenrobot:greendao:3.2.2'
-    implementation 'org.greenrobot:greendao-generator:3.2.2'
+        implementation 'org.greenrobot:greendao:3.2.2'
+        implementation 'org.greenrobot:greendao-generator:3.2.2'
+        compile 'com.android.support:multidex:1.0.2'
+        compile 'com.android.support:appcompat-v7:28.0.0'
+        compile 'com.melnykov:floatingactionbutton:1.3.0'
+        compile 'com.android.support:recyclerview-v7:28.0.0'
+        compile 'com.android.support:percent:28.0.0'
+        compile 'com.android.support:design:28.0.0'
+        compile 'com.android.support:cardview-v7:28.0.0'
+        //Promise Support
+        compile 'org.jdeferred:jdeferred-android-aar:1.2.4'
+        // ThirdParty
+        compile 'com.jonathanfinerty.once:once:1.0.3'
+        compile 'com.flurry.android:analytics:6.9.2'
+        compile 'com.kyleduo.switchbutton:library:1.4.6'
+        implementation project(':module_orc')
+        implementation project(':lib')
+        implementation 'co.infinum:goldeneye:1.1.2'
 
-    implementation project(':module_orc')
-    implementation 'co.infinum:goldeneye:1.1.2'
-
-}
+    }
 
 
 
-greendao {
-    schemaVersion 1 //数据库版本号
-    daoPackage 'com.itant.autoclick.dao'  //生成的dao路径
-    targetGenDir 'src/main/java'    //数据库文件的目录
-}
+    greendao {
+        schemaVersion 1 //数据库版本号
+        daoPackage 'com.itant.autoclick.dao'  //生成的dao路径
+        targetGenDir 'src/main/java'    //数据库文件的目录
+    }

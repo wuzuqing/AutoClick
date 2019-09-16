@@ -1447,10 +1447,10 @@ public class TaskUtil implements Constant {
 
         try {
             AutoTool.execShellCmdChuFu();
-           sleep(1200);
-            AutoTool.execShellCmd(CmdData.swipe(BaseApplication.getScreenWidth() - 100, 100));
-            Thread.sleep(600);
-            AutoTool.execShellCmd(CmdData.swipe(BaseApplication.getScreenWidth() - 100, 100));
+           sleep(1500);
+            AutoTool.execShellCmd(CmdData.swipe(BaseApplication.getScreenWidth() - 50, 50));
+            Thread.sleep(1200);
+            AutoTool.execShellCmd(CmdData.swipe(300, 600));
            sleep(1000);
             AutoTool.execShellCmd(paiHang);
             Thread.sleep(800);
