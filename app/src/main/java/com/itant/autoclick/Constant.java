@@ -251,6 +251,7 @@ public interface Constant {
      int TASK_STOP = 2500;
      int TASK_TOAST_COUNT_DOWN = 1500;
      int SCREEN_OFF = 999;
+     int SHOW_ORC_PAGE = 300;
 //     int SCREEN_ON = 992;
 
 

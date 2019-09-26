@@ -2,6 +2,7 @@ package com.example.module_orc;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -51,7 +52,7 @@ public class OrcHelper {
         String filePath = dirPath + "/" + langName + ".traineddata";
         File file = new File(filePath);
         if (file.exists()) {
-//            return file.getAbsolutePath();
+            //            return file.getAbsolutePath();
             file.delete();
         }
         InputStream inputStream = null;
@@ -76,7 +77,6 @@ public class OrcHelper {
      * 对要识别的图像进行识别
      *
      * @param bitmap 要识别的bitmap
-     * @return
      */
     public String orcText(Bitmap bitmap, String langName) {
         copyLanguagePackageToSDCard(langName);
@@ -93,7 +93,7 @@ public class OrcHelper {
         }
         bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         baseApi.setImage(bitmap);
-//        baseApi.setVariable("tessedit_char_whitelist", "0123456789X");
+        //        baseApi.setVariable("tessedit_char_whitelist", "0123456789X");
         result = baseApi.getUTF8Text();
         result = result.replaceAll("\\s*", "");
 
@@ -101,13 +101,55 @@ public class OrcHelper {
         return result;
     }
 
-    public void executeCallAsync(final String type, final Bitmap bitmap, String langName, final IDiscernCallback callback) {
-        switch (type) {
-            case "id":
+    public void executeCallAsync(final WorkMode mode, final Bitmap bitmap, String langName, final IDiscernCallback callback) {
+        switch (mode) {
+            case ID_CARD:
                 mExecutor.execute(new IDCardDiscern(bitmap, langName, callback));
                 break;
+            case NORMAL:
+                mExecutor.execute(new NormalCardDiscern(bitmap, langName, callback));
+                break;
+            case ONLY_BITMAP:
+                mExecutor.execute(new OnlyCardDiscern(bitmap, langName, callback));
+                break;
         }
-
     }
 
+    public void executeCallAsync(final WorkMode mode, final Bitmap bitmap, String langName, String pex, final IDiscernCallback callback) {
+        switch (mode) {
+            case ID_CARD:
+                mExecutor.execute(new IDCardDiscern(bitmap, langName, callback));
+                break;
+            case NORMAL:
+                mExecutor.execute(new NormalCardDiscern(bitmap, langName, callback));
+                break;
+            case ONLY_BITMAP:
+                mExecutor.execute(new OnlyCardDiscern(bitmap, langName, pex, callback));
+                break;
+        }
+    }
+
+    public void executeCallAsyncV2(final String filePath, final String langName, final String pex, final IDiscernCallback callback) {
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                mExecutor.execute(new OnlyCardDiscern(BitmapFactory.decodeFile(filePath), langName, pex, callback));
+            }
+        });
+    }
+
+    public void fileToBitmap(final BaseCallBack1<Bitmap> bitmapCallable,final File... filePaths) {
+        if (filePaths==null || filePaths.length==0){
+            return;
+        }
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (File path : filePaths) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(path.getAbsolutePath());
+                    bitmapCallable.call(bitmap,path.getName());
+                }
+            }
+        });
+    }
 }
