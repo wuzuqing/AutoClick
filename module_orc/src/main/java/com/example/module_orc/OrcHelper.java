@@ -71,6 +71,7 @@ public class OrcHelper {
     public void init(Context context) {
         mContext = context.getApplicationContext();
         cacheDir = context.getExternalCacheDir().getAbsolutePath();
+        OrcConfig.initFirst();
     }
 
     private String copyLanguagePackageToSDCard(String langName) {

@@ -188,7 +188,6 @@ public class WPZMGService2 extends Service implements Constant {
                         TaskUtil.bitmap = null;
                         System.gc();
                     }
-                    getPage();
                     userInfo = userInfos.get(currentUserInfo % userInfos.size());
                     if (onlyFl) {
                         Util.lockFengLu(userInfo.getName(), "LOCK", "1", 5555);

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.module_orc.model.TitleItem;
 import com.example.module_orc.util.GsonUtils;
@@ -60,7 +61,8 @@ public class OrcConfig {
 
     }
 
-    static {
+
+    public static void initFirst(){
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
             @Override
             public void run() {
@@ -119,6 +121,7 @@ public class OrcConfig {
             fileInputStream.close();
             bf.close();
             data = GsonUtils.toMap(stringBuilder.toString());
+            Log.d(TAG, "initTitleItem: "+data.values().toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

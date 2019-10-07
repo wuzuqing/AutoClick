@@ -20,6 +20,10 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.example.module_orc.IDiscernCallback;
+import com.example.module_orc.OrcHelper;
+import com.example.module_orc.OrcModel;
+import com.example.module_orc.WorkMode;
 import com.itant.autoclick.activity.MainActivity;
 
 import java.io.ByteArrayOutputStream;
@@ -30,6 +34,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 吴祖清
@@ -339,9 +344,19 @@ public class ScreenCapture {
     }
 
     public static Bitmap getBitmap() {
+        if (TaskUtil.bitmap!=null){
+            getPage();
+        }
         return  TaskUtil. bitmap ;
     }
-
+    private static void getPage() {
+        OrcHelper.getInstance().executeCallAsync(WorkMode.ONLY_BITMAP, TaskUtil.bitmap, "zwp", "1", new IDiscernCallback() {
+            @Override
+            public void call(final List<OrcModel> result) {
+                Log.d(TAG, "getPage: "+result.toString());
+            }
+        });
+    }
 
     public static String getAppPath(Context context) {
 
