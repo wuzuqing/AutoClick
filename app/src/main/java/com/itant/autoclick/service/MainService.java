@@ -16,6 +16,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.example.module_orc.IDiscernCallback;
+import com.example.module_orc.OpenCVHelper;
+import com.example.module_orc.OrcHelper;
+import com.example.module_orc.OrcModel;
 import com.itant.autoclick.Constant;
 import com.itant.autoclick.R;
 import com.itant.autoclick.activity.AssetsPointSettingActivity;
@@ -28,7 +32,11 @@ import com.itant.autoclick.util.TaskUtil;
 import com.itant.autoclick.util.ToastUitl;
 import com.itant.autoclick.util.Util;
 
+import java.util.List;
+
 import io.virtualapp.home.LoadingActivity;
+
+import static com.example.module_orc.WorkMode.ONLY_BITMAP;
 
 
 public class MainService extends Service {
@@ -59,6 +67,7 @@ public class MainService extends Service {
 //        mScreenBroadcastReceiver = new ScreenBroadcastReceiver();
         BaseApplication.setIsShowPanel(true);
         startScreenBroadcastReceiver();
+        OpenCVHelper.init(this);
     }
 
     //    private boolean isWPZMGServiceRunning;
@@ -175,6 +184,13 @@ public class MainService extends Service {
 //                llPanel.setVisibility(View.GONE);
 //                tvShowOrHide.setText("显示");
 //                startService(intent);
+                Util.getCapBitmapNew();
+                OrcHelper.getInstance().executeCallAsync(ONLY_BITMAP,TaskUtil. bitmap, "zwp", "", new IDiscernCallback() {
+                    @Override
+                    public void call(List<OrcModel> result) {
+                        Log.d(TAG, "call: "+result.toString());
+                    }
+                });
             }
         });
         toucherLayout.findViewById(R.id.tvLaunch).setOnClickListener(new View.OnClickListener() {

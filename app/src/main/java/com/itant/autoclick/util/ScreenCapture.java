@@ -191,7 +191,7 @@ public class ScreenCapture {
         } else {
             if (isAsyn) {
                 SaveTask mSaveTask = new SaveTask();
-//                AsyncTaskCompat.executeParallel(mSaveTask, image);
+                mSaveTask.execute(image);
             } else {
                 try {
                     Thread.sleep(time);

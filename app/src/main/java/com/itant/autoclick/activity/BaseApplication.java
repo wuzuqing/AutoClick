@@ -3,6 +3,7 @@ package com.itant.autoclick.activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
+import com.example.module_orc.OrcHelper;
 import com.itant.autoclick.util.ChengJiuArray;
 import com.itant.autoclick.util.CmdData;
 import com.itant.autoclick.util.JhmUtil;
@@ -49,6 +50,7 @@ public class BaseApplication extends VApp {
         SPUtils.init(getApplicationContext());
         StaticVal.init();
         OkHttpClientManager.init(getApplicationContext());
+        OrcHelper.getInstance().init(this);
         CmdData.init();
         ChengJiuArray.init();
         Util.init();

@@ -50,7 +50,7 @@ public  class OrcModel {
         @Override
         public String toString() {
             return "OrcModel{" +
-                    "rect=" + rect.toString() +
+                    "rect=" + rect +
                     ", result='" + result + '\'' +
                     '}';
         }
