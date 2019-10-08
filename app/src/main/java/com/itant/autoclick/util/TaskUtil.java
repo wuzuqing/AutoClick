@@ -3,6 +3,8 @@ package com.itant.autoclick.util;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 
+import com.example.module_orc.OrcHelper;
+import com.example.module_orc.OrcModel;
 import com.itant.autoclick.Constant;
 import com.itant.autoclick.activity.BaseApplication;
 import com.itant.autoclick.db.DbCore;
@@ -1715,6 +1717,11 @@ public class TaskUtil implements Constant {
             if (checkExp(dialogClose3, "关闭道具框")) continue;//检查网络环境
             if (isDestory) return;
             if (check(failCount, 20)) break;
+
+            List<OrcModel> models = OrcHelper.getInstance().executeCallSync(TaskUtil.bitmap);
+
+
+
             if (Util.checkColor(zhengShou)) {
                 AutoTool.execShellCmd(zhengShou);
                 Thread.sleep(1200);

@@ -23,7 +23,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -158,6 +160,18 @@ public class OrcHelper {
                 mExecutor.execute(new OnlyCardDiscern(bitmap, langName, pex, callback));
                 break;
         }
+    }
+
+    public  List<OrcModel> executeCallSync( final Bitmap bitmap){
+        final List<OrcModel> result  = new ArrayList<>();
+        OnlyCardDiscern discern = new OnlyCardDiscern(bitmap, "zwp", "", new IDiscernCallback() {
+            @Override
+            public void call(List<OrcModel> item) {
+                result.addAll(item);
+            }
+        });
+        discern.run();
+        return result;
     }
 
     public void executeCallAsyncV2(final String filePath, final String langName, final String pex, final IDiscernCallback callback) {

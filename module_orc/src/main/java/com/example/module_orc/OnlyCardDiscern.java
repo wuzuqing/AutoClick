@@ -82,6 +82,7 @@ public class OnlyCardDiscern implements Runnable {
             }
         });
         List<Rect> rects = new ArrayList<>();
+        int nextIndex = 0;
         for (int i = 0; i < contoursList.size(); i++) {
             Rect rect = Imgproc.boundingRect(contoursList.get(i));
             //排除无效区域
@@ -95,16 +96,15 @@ public class OnlyCardDiscern implements Runnable {
         Bitmap bitmap = null;
         Rect rect = null;
         try {
-            int index = 0;
             while (true) {
-                rect = rects.get(index);
+                rect = rects.get(nextIndex);
                 if (rect.x > 105 && rect.x < 180) {
                     break;
                 }
-                if (index == rects.size() - 1) {
+                if (nextIndex == rects.size() - 1) {
                     break;
                 }
-                index++;
+                nextIndex++;
             }
 
             dst = new Mat(threshold, rect);
@@ -126,7 +126,16 @@ public class OnlyCardDiscern implements Runnable {
         }
         Log.d(TAG, "run: pageName:" + pageName + " ignoreRect:" + ignoreRect);
         Mat result = src;
-
+        if (ignoreRect!=null){
+            int max = rects.size();
+            for (int i = nextIndex; i < max; i++) {
+                 rect = Imgproc.boundingRect(contoursList.get(i));
+                //排除无效区域
+                if (ignoreRect. ignoreRect(rect)) {
+                    continue;
+                }
+            }
+        }
         int newW = 0, newH = 0;
         if (callback != null) {
 

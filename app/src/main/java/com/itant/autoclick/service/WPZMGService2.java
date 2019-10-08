@@ -170,7 +170,7 @@ public class WPZMGService2 extends Service implements Constant {
                 TaskUtil.netPoint = CmdData.get(NET_CLOSE);
                 TaskUtil.dialogClose3 = CmdData.get(DIALOG_CLOSE3);        //道具对话框关闭按钮
                 boolean isLoop = SPUtils.getBoolean(KEY_LOOP);
-                boolean onlyFl = SPUtils.getBoolean(KEY_WORK_ONLY_FL);
+                boolean onlyFl = false;
                 boolean hasGengXin = Util.checkHasGengXin();
 //                boolean hasGengXin = SPUtils.getBoolean(KEY_GENG_XIN);
                 boolean zhTask = SPUtils.getBoolean("zh");

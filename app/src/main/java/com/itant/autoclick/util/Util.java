@@ -598,24 +598,26 @@ public class Util implements Constant {
 
     public static boolean checkTime(UserInfo userInfo, String type, int saveTime) {
         LogUtils.logd("checkTime:" + userInfo.getName() + " type:" + type + "  saveTime:" + saveTime);
-        if (TextUtils.isEmpty(Util.getFileString(String.format("%s%s", userInfo.getName(), type)))) {
-            Util.saveLastRefreshTime(userInfo.getName(), type, "1", saveTime);
-            return false;
-        }
-        return true;
+        return false;
+//        if (TextUtils.isEmpty(Util.getFileString(String.format("%s%s", userInfo.getName(), type)))) {
+//            Util.saveLastRefreshTime(userInfo.getName(), type, "1", saveTime);
+//            return false;
+//        }
+//        return true;
     }
 
     public static boolean checkTime(UserInfo userInfo, String type, int saveTime, boolean isFengLu) {
         LogUtils.logd("checkTime:" + userInfo.getName() + " type:" + type + "  saveTime:" + saveTime);
-        if (TextUtils.isEmpty(Util.getFengLuFileString(String.format("%s%s", userInfo.getName(), type)))) {
-            if (isFengLu) {
-                Util.saveFengLuLastRefreshTime(userInfo.getName(), type, "1", saveTime);
-            } else {
-                Util.saveLastRefreshTime(userInfo.getName(), type, "1", saveTime);
-            }
-            return false;
-        }
-        return true;
+        return false;
+//        if (TextUtils.isEmpty(Util.getFengLuFileString(String.format("%s%s", userInfo.getName(), type)))) {
+//            if (isFengLu) {
+//                Util.saveFengLuLastRefreshTime(userInfo.getName(), type, "1", saveTime);
+//            } else {
+//                Util.saveLastRefreshTime(userInfo.getName(), type, "1", saveTime);
+//            }
+//            return false;
+//        }
+//        return true;
     }
 
     public static int getSaveTime() {
