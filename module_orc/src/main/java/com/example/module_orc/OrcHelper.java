@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 
 import com.example.module_orc.util.GsonUtils;
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -74,6 +75,8 @@ public class OrcHelper {
         mContext = context.getApplicationContext();
         cacheDir = context.getExternalCacheDir().getAbsolutePath();
         OrcConfig.initFirst();
+        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+        OrcConfig.resetScreenSize(metrics.widthPixels,metrics.heightPixels);
     }
 
     private String copyLanguagePackageToSDCard(String langName) {
@@ -239,7 +242,7 @@ public class OrcHelper {
             Imgproc.cvtColor(demo, gray, Imgproc.COLOR_BGRA2GRAY);
             Imgproc.threshold(gray, gray, OrcConfig.thresh, 255, OrcConfig.threshType);
 
-            Imgproc.resize(gray, gray, OrcConfig.screenSize);
+            Imgproc.resize(gray, gray, OrcConfig.compressScreenSize);
 
 //            Imgcodecs.imwrite(new File(OrcHelper.getInstance().rootDir + "/scale", name.substring(0, name.indexOf(".")) + ".jpg").getAbsolutePath(), gray);
             Mat crop = new Mat(gray, OrcConfig.titleMidRect);

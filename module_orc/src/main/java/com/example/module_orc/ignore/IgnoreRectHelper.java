@@ -1,7 +1,5 @@
 package com.example.module_orc.ignore;
 
-import org.opencv.core.Rect;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +40,11 @@ public class IgnoreRectHelper {
         addIgnoreRect("内阁", new NeigeIgnoreRect());
         addIgnoreRect("通商", new TongshangIgnoreRect());
         addIgnoreRect("联盟兑换", new LianmengduihuanIgnoreRect());
+        addIgnoreRect("登录", new DengluIgnoreRect());
+        addIgnoreRect("进入游戏", new StartGameIgnoreRect());
+        addIgnoreRect("游戏公告", new GameGonggaoIgnoreRect());
+        addIgnoreRect("府内", new FuneiIgnoreRect());
+        addIgnoreRect("府外", new FuwaiMapIgnoreRect());
     }
 
     public static IgnoreRectHelper getInstance() {
@@ -54,15 +57,15 @@ public class IgnoreRectHelper {
         }
     }
 
-    public IIgnoreRect getIgnoreRect(String key){
+    public IIgnoreRect getIgnoreRect(String key) {
         return iIgnoreRectMap.get(key);
     }
 
-    public boolean ignoreRect(String key, Rect rect) {
-        IIgnoreRect ignoreRect = iIgnoreRectMap.get(key);
-        if (ignoreRect != null) {
-            return ignoreRect.ignoreRect(rect);
-        }
-        return false;
-    }
+//    public boolean ignoreRect(String key, Rect rect) {
+//        IIgnoreRect ignoreRect = iIgnoreRectMap.get(key);
+//        if (ignoreRect != null) {
+//            return ignoreRect.ignoreRect(rect);
+//        }
+//        return false;
+//    }
 }

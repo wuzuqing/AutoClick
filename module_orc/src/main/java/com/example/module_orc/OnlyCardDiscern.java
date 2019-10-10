@@ -13,6 +13,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -82,7 +83,6 @@ public class OnlyCardDiscern implements Runnable {
             }
         });
         List<Rect> rects = new ArrayList<>();
-        int nextIndex = 0;
         for (int i = 0; i < contoursList.size(); i++) {
             Rect rect = Imgproc.boundingRect(contoursList.get(i));
             //排除无效区域
@@ -96,15 +96,16 @@ public class OnlyCardDiscern implements Runnable {
         Bitmap bitmap = null;
         Rect rect = null;
         try {
+            int index = 0;
             while (true) {
-                rect = rects.get(nextIndex);
+                rect = rects.get(index);
                 if (rect.x > 105 && rect.x < 180) {
                     break;
                 }
-                if (nextIndex == rects.size() - 1) {
+                if (index == rects.size() - 1) {
                     break;
                 }
-                nextIndex++;
+                index++;
             }
 
             dst = new Mat(threshold, rect);
@@ -118,23 +119,34 @@ public class OnlyCardDiscern implements Runnable {
         IIgnoreRect ignoreRect = IgnoreRectHelper.getInstance().getIgnoreRect(pageName);
         if (ignoreRect == null) {
             Mat resize = new Mat();
-            Imgproc.resize(threshold, resize, OrcConfig.screenSize);
+            Imgproc.resize(threshold, resize, OrcConfig.compressScreenSize);
             Mat crop = new Mat(resize, OrcConfig.titleMidRect);
             String sign = OrcConfig.getSign(crop);
             pageName = Dictionary.getSignTitle(sign);
             ignoreRect = IgnoreRectHelper.getInstance().getIgnoreRect(pageName);
         }
+        if (ignoreRect == null) {
+            pageName = GetPageByOther.getPage(rects);
+            ignoreRect = IgnoreRectHelper.getInstance().getIgnoreRect(pageName);
+        }
         Log.d(TAG, "run: pageName:" + pageName + " ignoreRect:" + ignoreRect);
         Mat result = src;
-        if (ignoreRect!=null){
-            int max = rects.size();
-            for (int i = nextIndex; i < max; i++) {
-                 rect = Imgproc.boundingRect(contoursList.get(i));
-                //排除无效区域
-                if (ignoreRect. ignoreRect(rect)) {
-                    continue;
-                }
+        List<OrcModel> orcModels = new ArrayList<>();
+        if (ignoreRect != null) {
+            orcModels = ignoreRect.ignoreRect(rects);
+            Imgcodecs.imwrite(OrcHelper.getInstance().getTargetFile("/some/threshold.jpg").getAbsolutePath(), threshold);
+            for (OrcModel model : orcModels) {
+                dst = new Mat(threshold, model.getRect());
+                Imgproc.rectangle(src, model.getRect(), new Scalar(0, 0, 255), 1, 8, 0);
+//                OpencvUtil.drawContours(dst,50,255);
+                Imgcodecs.imwrite(OrcHelper.getInstance().getTargetFile("/some/" + model.getRect().toString() + ".jpg").getAbsolutePath(), dst);
+                bitmap = Bitmap.createBitmap(dst.cols(), dst.rows(), Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(dst, bitmap);
+                model.setBitmap(bitmap);
+                String value = OrcHelper.getInstance().orcText(bitmap, "small");
+                model.setResult(value);
             }
+            Log.d(TAG, "run: pageName:" + pageName + " result:" + orcModels.toString());
         }
         int newW = 0, newH = 0;
         if (callback != null) {
@@ -144,7 +156,8 @@ public class OnlyCardDiscern implements Runnable {
             Utils.matToBitmap(result, bitmap);
             orcModel.setBitmap(bitmap);
             orcModel.setResult(pageName);
-            callback.call(Collections.singletonList(orcModel));
+            orcModels.add(0, orcModel);
+            callback.call(orcModels);
         }
         Log.d(TAG, "discern: usedTime" + (System.currentTimeMillis() - start) + " newW:" + newW + " newH:" + newH);
     }

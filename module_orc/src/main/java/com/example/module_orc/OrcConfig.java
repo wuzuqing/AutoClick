@@ -27,17 +27,22 @@ import static org.opencv.imgproc.Imgproc.TM_CCORR_NORMED;
 
 public class OrcConfig {
 
-    public static Size screenSize = new Size(180, 320);
+    /**
+     * 压缩图片大小
+     */
+    public static Size sScreenSize = new Size(180, 320);
+    public static Size compressScreenSize = new Size(180, 320);
+    public static Size defaultScreenSize = new Size(360, 640);
     public static Rect titleMidRect = new Rect(new double[]{62, 2, 54, 30});
     public static Rect titleMidRectSmall = new Rect(new double[]{72, 14, 40, 13});
     // 112, 13, 125, 50
     public static Rect titleMidRectCurrent = new Rect(new double[]{112, 13, 125, 50});
     public static Rect titleMidCropRect = new Rect(new double[]{0, 0, 180, 60});
 
-//    public static Size screenSize = new Size(540, 960);
+//    public static Size compressScreenSize = new Size(540, 960);
 //    public static Rect titleMidRect = new Rect(new double[]{180, 10, 180, 90});
 //    public static Rect titleMidCropRect = new Rect(new double[]{0, 0, 540, 180});
-//    public static Size screenSize = new Size(270, 480);
+//    public static Size compressScreenSize = new Size(270, 480);
 //    public static Rect titleMidRect =new Rect(new double[]{78,2,110,45});
 //    public static Rect titleMidCropRect =new Rect(new double[]{0,0,270,85});
 
@@ -45,7 +50,7 @@ public class OrcConfig {
     public static int threshType = Imgproc.THRESH_BINARY_INV;
     public static int width = 14;
 
-    public static int baseIgnoreHeight = 14;
+    public static int baseIgnoreHeight = 12;
     public static int baseIgnoreX = 1;
     public static int topColorXishu = 1;
     public static int method = TM_CCORR_NORMED;
@@ -57,9 +62,6 @@ public class OrcConfig {
 
     public static Map<String, TitleItem> mTitleItems = new HashMap<>();
 
-    public interface Zican {
-
-    }
 
 
     public static void initFirst(){
@@ -70,6 +72,12 @@ public class OrcConfig {
                 initTitleItem();
             }
         });
+    }
+
+    public static void resetScreenSize(int width,int height){
+        sScreenSize.width = width;
+        sScreenSize.height = height;
+        topColorXishu = (int) (width/defaultScreenSize.width);
     }
 
     public static String getSign(Mat mat) {
@@ -179,6 +187,28 @@ public class OrcConfig {
         startX = topColorX / topColorXishu;
         startY = topColorY / topColorXishu;
     }
+
+    public static OrcModel append( Rect rect) {
+        OrcModel orcModel = new OrcModel();
+        orcModel.setRect(rect);
+        return orcModel;
+    }
+
+    public static OrcModel append( Rect rect,int x, int y, int width, int height) {
+        OrcModel orcModel = new OrcModel();
+        orcModel.setRect(offset(rect, x, y, width, height));
+        return orcModel;
+    }
+    private static Rect offset(Rect rect, int x, int y, int width, int height) {
+        rect.x += x;
+        rect.y += y;
+        rect.width -= width;
+        rect.height -= height;
+        return rect;
+    }
+
+
+
 
 
     public interface BangDan {
