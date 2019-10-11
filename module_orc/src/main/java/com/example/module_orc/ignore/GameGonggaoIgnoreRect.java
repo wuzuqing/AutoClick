@@ -22,8 +22,8 @@ public class GameGonggaoIgnoreRect implements IIgnoreRect {
     public List<OrcModel> ignoreRect(List<Rect> rects) {
         List<OrcModel> result = new ArrayList<>();
         // {127, 123, 107x30}  {312, 137, 44x23}
-        result.add(OrcConfig.append(gameNoice));
         result.add(OrcConfig.append(close));
+        result.add(OrcConfig.append(gameNoice));
         return result;
     }
 }

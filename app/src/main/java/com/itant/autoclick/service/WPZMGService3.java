@@ -8,7 +8,10 @@ import android.os.IBinder;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.example.module_orc.IDiscernCallback;
+import com.example.module_orc.OrcHelper;
 import com.example.module_orc.OrcModel;
+import com.example.module_orc.WorkMode;
 import com.itant.autoclick.Constant;
 import com.itant.autoclick.activity.BaseApplication;
 import com.itant.autoclick.model.PointModel;
@@ -30,7 +33,7 @@ import java.util.List;
 
 import io.virtualapp.AutoClick;
 
-public class WPZMGService2 extends Service implements Constant {
+public class WPZMGService3 extends Service implements Constant {
 
     private List<TaskModel> tasks;
 
@@ -135,7 +138,7 @@ public class WPZMGService2 extends Service implements Constant {
         }
         return START_STICKY;
     }
-   private List<OrcModel> pageData;
+
     private class TaskThread implements Runnable {
         @Override
         public void run() {
@@ -200,12 +203,8 @@ public class WPZMGService2 extends Service implements Constant {
                     while (true) {   //检查准备输入账号的环境
                         if (TaskUtil.isDestory) return;
                         Util.getCapBitmapNew();
-                         pageData = Util.getPageData();
-                        if (checkPage("登录") || TaskUtil.check(TaskUtil.failCount, 8)){
+                        if (Util.checkColor(loginClose) || TaskUtil.check(TaskUtil.failCount, 8))
                             break;
-                        }
-//                        if (Util.checkColor(loginClose) || TaskUtil.check(TaskUtil.failCount, 8))
-//                            break;
                         Thread.sleep(600);
                     }
                     if (TaskUtil.needContinue) continue;
@@ -235,7 +234,7 @@ public class WPZMGService2 extends Service implements Constant {
                     Thread.sleep(500);
                     AutoTool.execShellCmd(CmdData.inputTextUserInfoName + userInfo.getName()); //输入账号
                     Thread.sleep(BaseApplication.getScreenWidth() == 1080 ? 500 : 2500);
-                    AutoTool.execShellCmd(pageData.get(1).getRect()); //点击登录
+                    AutoTool.execShellCmd(loginGame); //点击登录
                     TaskUtil.sleep(1000);
                     TaskUtil.failCount = 0;
                     while (hasGengXin) {               //检查进入游戏的环境
@@ -257,9 +256,8 @@ public class WPZMGService2 extends Service implements Constant {
                     while (true) {               //检查进入游戏的环境
                         if (TaskUtil.isDestory) return;
                         Util.getCapBitmapNew();
-                        pageData = Util.getPageData();
-                        if (checkPage("进入游戏")) {
-                            AutoTool.execShellCmd(pageData.get(1).getRect());  //进入游戏
+                        if (Util.checkColor(startGame)) {
+                            AutoTool.execShellCmd(startGame);  //进入游戏
                             Thread.sleep(TaskUtil.isNewApi ? 4500 : 3000);
                             TaskUtil.failCount = 0;
                             break;
@@ -271,17 +269,14 @@ public class WPZMGService2 extends Service implements Constant {
 
                     while (true) {                           //检查 通告对话框的环境
                         if (TaskUtil.isDestory) return;
+
                         Util.getCapBitmapNew();
-                        pageData = Util.getPageData();
-                        if (checkPage("游戏公告")  || TaskUtil.check(TaskUtil.failCount, 8)) {
+                        if (Util.checkColor(dialogClose2) || TaskUtil.check(TaskUtil.failCount, 8))
                             break;
-                        }
-//                        if (Util.checkColor(dialogClose2) || TaskUtil.check(TaskUtil.failCount, 8))
-//                            break;
                         TaskUtil.sleep(600);
                     }
                     if (TaskUtil.needContinue) continue;
-                    AutoTool.execShellCmd(pageData.get(1).getRect());  //关闭通告对话框
+                    AutoTool.execShellCmd(dialogClose2);  //关闭通告对话框
                     Thread.sleep(500);
                     if (userInfos.size() == 1) {
                         if (TaskUtil.isDestory) return;
@@ -314,8 +309,13 @@ public class WPZMGService2 extends Service implements Constant {
         }
     }
 
-    private boolean checkPage(String currentPage) {
-        return TaskUtil.checkPage(pageData,currentPage);
+    private void getPage() {
+        OrcHelper.getInstance().executeCallAsync(WorkMode.ONLY_BITMAP, TaskUtil.bitmap, "zwp", "1", new IDiscernCallback() {
+            @Override
+            public void call(final List<OrcModel> result) {
+                mHandler.sendMessage(mHandler.obtainMessage(SHOW_ORC_PAGE, result));
+            }
+        });
     }
 
     private void restart() {

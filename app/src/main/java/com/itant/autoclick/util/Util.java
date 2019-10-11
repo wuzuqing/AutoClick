@@ -17,6 +17,8 @@ import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.Log;
 
+import com.example.module_orc.OrcHelper;
+import com.example.module_orc.OrcModel;
 import com.google.gson.reflect.TypeToken;
 import com.itant.autoclick.Constant;
 import com.itant.autoclick.activity.BaseApplication;
@@ -219,7 +221,7 @@ public class Util implements Constant {
 //            "ck52434333,520333&ck83250887,520333&ck84012149,520333&ck75077701,520333&ck74266770,520333&" +
 //            "ck56270983,520333&ck41351036,520333&" +
 //            "ck97381288,520333&ck68721497,520333&ck99371248,520333&ck21627506,520333&" +
-                    "ck69539153,520333&ck82369145,520333&ck19656822,520333&ck92984644,520333";
+            "ck69539153,520333&ck82369145,520333&ck19656822,520333&ck92984644,520333";
     public static long nextDayTime;
 
     public static void init() {
@@ -400,6 +402,11 @@ public class Util implements Constant {
 //        Bitmap bitmap = null;
         if (Build.VERSION.SDK_INT >= 21) {
             ScreenCapture.startCaptureSync();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return ScreenCapture.getBitmap();
         }
         try {
@@ -581,6 +588,7 @@ public class Util implements Constant {
         }
         ACache.get(fengLuFile).put(String.format("%s%s", user, type), time, saveTime);
     }
+
     public static synchronized void lockFengLu(String user, String type, String time, int saveTime) {
         if (BaseApplication.densityDpi == 480) {
             initSaveFile();
@@ -591,7 +599,7 @@ public class Util implements Constant {
         ACache.get(fengLuFile).put(String.format("%s%s", user, type), time, saveTime);
     }
 
-    public static synchronized void unLockFengLu(String user, String type){
+    public static synchronized void unLockFengLu(String user, String type) {
         ACache.get(fengLuFile).remove(String.format("%s%s", user, type));
     }
 
@@ -734,4 +742,9 @@ public class Util implements Constant {
 //        alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        startActivity(alarmIntent);
 //    }
+
+
+    public static List<OrcModel> getPageData() {
+        return OrcHelper.getInstance().executeCallSync(TaskUtil.bitmap);
+    }
 }

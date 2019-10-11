@@ -154,7 +154,7 @@ public class ScreenCapture {
 
     private void createImageReader() {
         try {
-            mImageReader = ImageReader.newInstance(mScreenWidth, mScreenHeight, PixelFormat.RGBA_8888, 1);
+            mImageReader = ImageReader.newInstance(mScreenWidth, mScreenHeight, PixelFormat.RGBA_8888, 2);
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -128,7 +128,9 @@ public class CmdData implements Constant {
     public static int getXRatio(float ratio) {
         return (int) (BaseApplication.getScreenWidth() * ratio);
     }
-
+    public static int getYRatio(float ratio) {
+        return (int) (BaseApplication.getScreenHeight() * ratio);
+    }
 
 
 

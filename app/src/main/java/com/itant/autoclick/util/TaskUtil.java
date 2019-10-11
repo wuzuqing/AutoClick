@@ -2,8 +2,8 @@ package com.itant.autoclick.util;
 
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.util.Log;
 
-import com.example.module_orc.OrcHelper;
 import com.example.module_orc.OrcModel;
 import com.itant.autoclick.Constant;
 import com.itant.autoclick.activity.BaseApplication;
@@ -1700,27 +1700,39 @@ public class TaskUtil implements Constant {
         AutoTool.execShellCmdClose();
         Thread.sleep(isNewApi ? 1200 : 1000);
     }
+    public static boolean checkPage(  List<OrcModel> pageData, String currentPage) {
+        return TextUtils.equals(currentPage, pageData.get(0).getResult());
+    }
 
+    private static final String TAG = "TaskUtil";
     public static void oneTask(TaskModel task) throws InterruptedException { //2
         final List<PointModel> pointModels = task.getData();
         int count = 0;
+        Util.getCapBitmapNew();
+        List<OrcModel> pageData = Util.getPageData();
+        if (checkPage(pageData,"府内")){
+            AutoTool.execShellCmd(pageData.get(1).getRect());
+        }
         PointModel huaAn = CmdData.get(HUA_AN);
         PointModel zhengShou = CmdData.get(ZHENG_SHOU);
-        AutoTool.execShellCmd(huaAn);                               //点击华安进入收菜界面
+//        AutoTool.execShellCmd(huaAn);                               //点击华安进入收菜界面
         Thread.sleep(BaseApplication.densityDpi == 480 ? 2500 : 1200);
         isEnd = false;
         resetFail();
         while (true) {
             if (isDestory) return;
             Util.getCapBitmapNew();
+            pageData = Util.getPageData();
+
             if (checkExp(netPoint, "当前网络异常")) continue;//检查网络环境
             if (checkExp(dialogClose3, "关闭道具框")) continue;//检查网络环境
             if (isDestory) return;
             if (check(failCount, 20)) break;
-
-            List<OrcModel> models = OrcHelper.getInstance().executeCallSync(TaskUtil.bitmap);
-
-
+            if (!checkPage(pageData,"经营资产")){
+                Log.d(TAG, "oneTask: "+pageData.toString());
+                continue;
+//                AutoTool.execShellCmd(pageData.get(1).getRect());
+            }
 
             if (Util.checkColor(zhengShou)) {
                 AutoTool.execShellCmd(zhengShou);
@@ -1729,12 +1741,13 @@ public class TaskUtil implements Constant {
                 Thread.sleep(BaseApplication.densityDpi == 480 ? 1800 : 800);
                 return;
             }
-            ImageParse.getSyncData(new ImageParse.Call() {
-                @Override
-                public void call(List<Result.ItemsBean> result) {
-                    isEnd = TaskUtil.getOneCount(result, pointModels);
-                }
-            });
+//            ImageParse.getSyncData(new ImageParse.Call() {
+//                @Override
+//                public void call(List<Result.ItemsBean> result) {
+//                    isEnd = TaskUtil.getOneCount(result, pointModels);
+//                }
+//            });
+            isEnd = true;
             if (isEnd) {
                 AutoTool.execShellCmdClose();
                 Thread.sleep(BaseApplication.densityDpi == 480 ? 1800 : 800);
