@@ -156,6 +156,7 @@ public class MainService extends Service {
                 ((TextView) v).setText(Util.isWPZMGServiceRunning ? "取消挂机" : "开始挂机");
                 llPanel.setVisibility(View.GONE);
                 tvShowOrHide.setText("显示");
+                updateTopLeft();
             }
         });
         toucherLayout.findViewById(R.id.tvOneTask).setOnClickListener(new View.OnClickListener() {
@@ -282,6 +283,11 @@ public class MainService extends Service {
 
     }
 
+    private void updateTopLeft(){
+        params.x = 0;
+        params.y =  -statusBarHeight;
+        windowManager.updateViewLayout(toucherLayout, params);
+    }
 
     public boolean isTy() {
         if (isTy) {

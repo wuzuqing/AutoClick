@@ -10,7 +10,7 @@ import com.itant.autoclick.util.LogUtils;
 import com.itant.autoclick.util.Util;
 import com.itant.autoclick.v2.AbsTaskElement;
 
-import static com.itant.autoclick.util.TaskUtil.netPoint;
+import org.opencv.core.Rect;
 
 public class JyzcTaskElement extends AbsTaskElement {
     public JyzcTaskElement(TaskModel taskModel) {
@@ -18,6 +18,7 @@ public class JyzcTaskElement extends AbsTaskElement {
     }
 
     private boolean needClickZhengshou = true;
+    private boolean isEnd;
     @Override
     protected boolean doTask() throws Exception {
         pageData = Util.getBitmapAndPageData();
@@ -26,6 +27,7 @@ public class JyzcTaskElement extends AbsTaskElement {
 
         if (checkPage("府内")) {
             AutoTool.execShellCmd(pageData.get(0).getRect());
+            isEnd = false;
             Thread.sleep(1000);
             return false;
         } else if (checkPage("道具使用")) {
@@ -43,26 +45,27 @@ public class JyzcTaskElement extends AbsTaskElement {
         if (needClickZhengshou){
             AutoTool.execShellCmd(CmdData.get(ZHENG_SHOU));
             Thread.sleep(800);
-            pageData = Util.getBitmapAndPageData();
             needClickZhengshou = false;
+            return false;
+        }
+        if (isEnd) {
+            clickClose();
+            Thread.sleep(1000);
+            return true;
         }
         int count = 0;
 
         for (OrcModel orcModel : pageData) {
             if (TextUtils.equals("经营", orcModel.getResult())) {
-                AutoTool.execShellCmd(orcModel.getRect());
-                Thread.sleep(80);
+                Rect rect = orcModel.getRect();
+                AutoTool.execShellCmdXy(rect.x ,rect.y);
+                Thread.sleep(200);
                 count++;
             }
         }
-        Thread.sleep(700);
-        boolean isEnd = count == 0;
+        Thread.sleep(600);
+         isEnd = count == 0;
         LogUtils.logd(" count" + count);
-        if (isEnd) {
-            clickClose();
-            Thread.sleep(800);
-            return true;
-        }
         return false;
     }
 }
