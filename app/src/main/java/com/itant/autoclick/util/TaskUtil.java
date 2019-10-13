@@ -2,8 +2,8 @@ package com.itant.autoclick.util;
 
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.example.module_orc.OrcConfig;
 import com.example.module_orc.OrcModel;
 import com.itant.autoclick.Constant;
 import com.itant.autoclick.activity.BaseApplication;
@@ -1701,53 +1701,55 @@ public class TaskUtil implements Constant {
         Thread.sleep(isNewApi ? 1200 : 1000);
     }
     public static boolean checkPage(  List<OrcModel> pageData, String currentPage) {
-        return TextUtils.equals(currentPage, pageData.get(0).getResult());
+        return TextUtils.equals(currentPage,OrcConfig.pageName);
     }
 
     private static final String TAG = "TaskUtil";
     public static void oneTask(TaskModel task) throws InterruptedException { //2
-        final List<PointModel> pointModels = task.getData();
         int count = 0;
-        Util.getCapBitmapNew();
-        List<OrcModel> pageData = Util.getPageData();
-        if (checkPage(pageData,"府内")){
-            AutoTool.execShellCmd(pageData.get(1).getRect());
-        }
-        PointModel huaAn = CmdData.get(HUA_AN);
+        List<OrcModel> pageData;
         PointModel zhengShou = CmdData.get(ZHENG_SHOU);
-//        AutoTool.execShellCmd(huaAn);                               //点击华安进入收菜界面
-        Thread.sleep(BaseApplication.densityDpi == 480 ? 2500 : 1200);
         isEnd = false;
         resetFail();
-        while (true) {
-            if (isDestory) return;
-            Util.getCapBitmapNew();
-            pageData = Util.getPageData();
+        while (!isDestory) {
+            pageData = Util.getBitmapAndPageData();
 
             if (checkExp(netPoint, "当前网络异常")) continue;//检查网络环境
             if (checkExp(dialogClose3, "关闭道具框")) continue;//检查网络环境
             if (isDestory) return;
             if (check(failCount, 20)) break;
-            if (!checkPage(pageData,"经营资产")){
-                Log.d(TAG, "oneTask: "+pageData.toString());
+            if (checkPage(pageData, "府内")) {
+                AutoTool.execShellCmd(pageData.get(1).getRect());
+                Thread.sleep(BaseApplication.densityDpi == 480 ? 1200 : 1200);
                 continue;
-//                AutoTool.execShellCmd(pageData.get(1).getRect());
+            } else if (!checkPage(pageData, "经营资产")) {
+
+                continue;
+            }else if (checkPage(pageData,"道具使用")){
+                AutoTool.execShellCmd(pageData.get(1).getRect());
+                Thread.sleep(600);
+                continue;
+            }
+            count = 0;
+//            if (Util.checkColor(zhengShou)) {
+//                AutoTool.execShellCmd(zhengShou);
+//                Thread.sleep(1200);
+//                AutoTool.execShellCmdClose();
+//                Thread.sleep(BaseApplication.densityDpi == 480 ? 1800 : 800);
+//                return;
+//            }
+            for (OrcModel orcModel : pageData) {
+                if (TextUtils.equals("经营", orcModel.getResult())) {
+                    AutoTool.execShellCmd(orcModel.getRect());
+                    count++;
+                }
             }
 
-            if (Util.checkColor(zhengShou)) {
-                AutoTool.execShellCmd(zhengShou);
-                Thread.sleep(1200);
-                AutoTool.execShellCmdClose();
-                Thread.sleep(BaseApplication.densityDpi == 480 ? 1800 : 800);
-                return;
-            }
-//            ImageParse.getSyncData(new ImageParse.Call() {
-//                @Override
-//                public void call(List<Result.ItemsBean> result) {
-//                    isEnd = TaskUtil.getOneCount(result, pointModels);
-//                }
-//            });
-            isEnd = true;
+            AutoTool.execShellCmd(zhengShou);
+            Thread.sleep(300);
+
+
+            isEnd = count == 0;
             if (isEnd) {
                 AutoTool.execShellCmdClose();
                 Thread.sleep(BaseApplication.densityDpi == 480 ? 1800 : 800);

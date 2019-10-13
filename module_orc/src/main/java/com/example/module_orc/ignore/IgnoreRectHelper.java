@@ -46,6 +46,7 @@ public class IgnoreRectHelper {
         addIgnoreRect("游戏公告", new GameGonggaoIgnoreRect());
         addIgnoreRect("府内", new FuneiIgnoreRect());
         addIgnoreRect("府外", new FuwaiMapIgnoreRect());
+        addIgnoreRect("道具使用", new DaojuIgnoreRect());
     }
 
     public static IgnoreRectHelper getInstance() {

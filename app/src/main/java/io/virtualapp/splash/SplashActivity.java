@@ -1,16 +1,17 @@
 package io.virtualapp.splash;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 
+import com.itant.autoclick.R;
+import com.itant.autoclick.activity.RequestPermissionsActivity;
 import com.lody.virtual.client.core.VirtualCore;
 
-import com.itant.autoclick.R;
 import io.virtualapp.VCommends;
 import io.virtualapp.abs.ui.VActivity;
 import io.virtualapp.abs.ui.VUiKit;
 import io.virtualapp.home.FlurryROMCollector;
-import io.virtualapp.home.HomeActivity;
 import jonathanfinerty.once.Once;
 
 public class SplashActivity extends VActivity {
@@ -37,7 +38,8 @@ public class SplashActivity extends VActivity {
                 VUiKit.sleep(delta);
             }
         }).done((res) -> {
-            HomeActivity.goHome(this);
+            startActivity(new Intent(this, RequestPermissionsActivity.class));
+//            LaunchApp.launchapp(this,LaunchApp.JPZMG_PACKAGE_NAME);
             finish();
         });
     }

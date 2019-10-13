@@ -178,6 +178,8 @@ public interface Constant {
     String CHENG_JIU_GET_5 = "CHENG_JIU_GET_5";
 
     String CURRENT_USER_INFO  = "CURRENT_USER_INFO";
+    String CURRENT_TASK_STEP  = "CURRENT_TASK_STEP";
+    String CURRENT_PAGE  = "CURRENT_PAGE";
     String REGISTER_CLICK  = "REGISTER_CLICK";
     String REALY_NAME_OK = "REALY_NAME_OK";
     String REGISTER_OK = "REGISTER_OK";

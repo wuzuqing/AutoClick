@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -94,12 +93,12 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         overridePendingTransition(0, 0);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        mUiHandler = new Handler(Looper.getMainLooper());
-        bindViews();
-        initLaunchpad();
-        initMenu();
-        new HomePresenterImpl(this).start();
+//        setContentView(R.layout.activity_home);
+//        mUiHandler = new Handler(Looper.getMainLooper());
+//        bindViews();
+//        initLaunchpad();
+//        initMenu();
+//        new HomePresenterImpl(this).start();
     }
 
     private void initMenu() {

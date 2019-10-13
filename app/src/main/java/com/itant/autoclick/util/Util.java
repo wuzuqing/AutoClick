@@ -30,6 +30,14 @@ import com.itant.autoclick.model.UserInfo;
 import com.itant.autoclick.service.MainService;
 import com.itant.autoclick.service.WPZMGService2;
 import com.itant.autoclick.tool.AutoTool;
+import com.itant.autoclick.v2.TaskElement;
+import com.itant.autoclick.v2.task.ClzwTaskElement;
+import com.itant.autoclick.v2.task.FengluTaskElement;
+import com.itant.autoclick.v2.task.JoinGameTaskElement;
+import com.itant.autoclick.v2.task.JyzcTaskElement;
+import com.itant.autoclick.v2.task.MobaiTaskElement;
+import com.itant.autoclick.v2.task.ShuyuanTaskElement;
+import com.itant.autoclick.v2.task.StartAndLoginTaskElement;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -216,6 +224,39 @@ public class Util implements Constant {
         }
         return sTaskModelList;
     }
+
+    public static List<TaskElement> getTaskElement() {
+        List<TaskModel> taskModels = getTaskModel();
+        List<TaskElement> result = new ArrayList<>();
+        result.add(new StartAndLoginTaskElement(new TaskModel("登录")));
+        result.add(new JoinGameTaskElement(new TaskModel("进入游戏")));
+        for (TaskModel model : taskModels) {
+            TaskElement element = createTaskElement(model);
+            if (element == null) {
+                continue;
+            }
+            result.add(element);
+        }
+        LogUtils.logd(taskModels.toString());
+        return result;
+    }
+
+    private static TaskElement createTaskElement(TaskModel model) {
+        switch (model.getType()) {
+            case ONE:
+                return new JyzcTaskElement(model);
+            case TASK_ZHENG_WU:
+                return new ClzwTaskElement(model);
+            case TASK_MO_BAI:
+                return new MobaiTaskElement(model);
+            case TASK_FENG_LU:
+                return new FengluTaskElement(model);
+            case TASK_SHU_YUAN:
+                return new ShuyuanTaskElement(model);
+        }
+        return null;
+    }
+
 
     private static String sDefUserInfo =
 //            "ck52434333,520333&ck83250887,520333&ck84012149,520333&ck75077701,520333&ck74266770,520333&" +
@@ -746,5 +787,9 @@ public class Util implements Constant {
 
     public static List<OrcModel> getPageData() {
         return OrcHelper.getInstance().executeCallSync(TaskUtil.bitmap);
+    }
+
+    public static List<OrcModel> getBitmapAndPageData() {
+        return OrcHelper.getInstance().executeCallSync(Util.getCapBitmapNew());
     }
 }

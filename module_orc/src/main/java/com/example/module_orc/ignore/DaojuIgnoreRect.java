@@ -12,18 +12,14 @@ import java.util.List;
  * 作者：士元
  * 时间：2019/9/16 18:07
  * 邮箱：wuzuqing@linghit.com
- * 说明：游戏公告
+ * 说明：道具
  */
-public class GameGonggaoIgnoreRect implements IIgnoreRect {
-    public static final Rect gameNoice = new Rect(127, 123, 107, 30);
-    public static final Rect close = new Rect(312, 137, 44, 23);
-
+public class DaojuIgnoreRect implements IIgnoreRect {
+  public static  final   Rect daojuClose = new Rect(298, 184, 59, 37);
     @Override
     public List<OrcModel> ignoreRect(List<Rect> rects) {
         List<OrcModel> result = new ArrayList<>();
-        // {127, 123, 107x30}  {312, 137, 44x23}
-        result.add(OrcConfig.append(gameNoice));
-        result.add(OrcConfig.append(close));
+        result.add(OrcConfig.append(daojuClose));
         return result;
     }
 }

@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.example.module_orc.IDiscernCallback;
 import com.example.module_orc.OpenCVHelper;
 import com.example.module_orc.OrcHelper;
 import com.example.module_orc.OrcModel;
@@ -25,18 +24,19 @@ import com.itant.autoclick.R;
 import com.itant.autoclick.activity.AssetsPointSettingActivity;
 import com.itant.autoclick.activity.BaseApplication;
 import com.itant.autoclick.activity.DialogActivity;
+import com.itant.autoclick.tool.AutoTool;
 import com.itant.autoclick.util.HandlerUtil;
 import com.itant.autoclick.util.LaunchApp;
 import com.itant.autoclick.util.SPUtils;
+import com.itant.autoclick.util.ScreenCapture;
 import com.itant.autoclick.util.TaskUtil;
 import com.itant.autoclick.util.ToastUitl;
 import com.itant.autoclick.util.Util;
+import com.itant.autoclick.v2.TaskState;
 
 import java.util.List;
 
 import io.virtualapp.home.LoadingActivity;
-
-import static com.example.module_orc.WorkMode.ONLY_BITMAP;
 
 
 public class MainService extends Service {
@@ -184,11 +184,14 @@ public class MainService extends Service {
 //                llPanel.setVisibility(View.GONE);
 //                tvShowOrHide.setText("显示");
 //                startService(intent);
-                Util.getCapBitmapNew();
-                OrcHelper.getInstance().executeCallAsync(ONLY_BITMAP,TaskUtil. bitmap, "zwp", "", new IDiscernCallback() {
+                HandlerUtil.async(new Runnable() {
                     @Override
-                    public void call(List<OrcModel> result) {
-                        Log.d(TAG, "call: "+result.toString());
+                    public void run() {
+                        ScreenCapture.startCaptureSync();
+                        List<OrcModel> result = OrcHelper.getInstance().executeCallSync(ScreenCapture.get().getCurrentBitmap());
+                        if (result.size() >= 2) {
+                            AutoTool.execShellCmd(result.get(1).getRect());
+                        }
                     }
                 });
             }
@@ -303,12 +306,14 @@ public class MainService extends Service {
 
     private void xiaoHao(boolean some) {
         Util.isWPZMGServiceRunning = !Util.isWPZMGServiceRunning;
-        Intent intent2 = new Intent(MainService.this, WPZMGService2.class);
+        Intent intent2 = new Intent(MainService.this, WPZMGService3.class);
         if (!Util.isWPZMGServiceRunning) {
-            intent2.putExtra("stop", true);
             Util.setResLastTime(0);
+            TaskState.isWorking = false;
+            stopService(intent2);
+        } else {
+            startService(intent2);
         }
-        startService(intent2);
     }
 
     @Override

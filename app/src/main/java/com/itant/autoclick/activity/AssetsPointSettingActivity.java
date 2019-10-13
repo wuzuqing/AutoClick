@@ -20,6 +20,7 @@ import com.itant.autoclick.util.LogUtils;
 import com.itant.autoclick.util.SPUtils;
 import com.itant.autoclick.util.TaskUtil;
 import com.itant.autoclick.util.Util;
+import com.itant.autoclick.v2.TaskState;
 
 /**
  * @author 吴祖清
@@ -48,7 +49,7 @@ public class AssetsPointSettingActivity extends NoAnimatorActivity implements Co
             public void onClick(View v) {
                 String jsonList = JsonUtils.toJson(CmdData.coordinateList);
                 SPUtils.setString(COORDINATE_KEY,jsonList);
-
+                TaskState.get().init(BaseApplication.getAppContext());
                 LogUtils.logd("coordinateList:"+jsonList);
                 finish();
             }

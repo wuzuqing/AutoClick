@@ -15,12 +15,16 @@ import java.util.List;
  * 说明：府内
  */
 public class FuneiIgnoreRect implements IIgnoreRect {
-    public static final Rect loginGame = new Rect(134, 366, 93, 20);
+    public static final Rect huaAn = new Rect(122, 341, 98, 150);
+    public static final Rect shiYe = new Rect(24, 333, 33, 18);
+    public static final Rect hongYan = new Rect(237, 333, 60, 60);
 
     @Override
     public List<OrcModel> ignoreRect(List<Rect> rects) {
         List<OrcModel> result = new ArrayList<>();
-        result.add(OrcConfig.append(loginGame));
+        result.add(OrcConfig.append(huaAn));
+        result.add(OrcConfig.append(shiYe));
+        result.add(OrcConfig.append(hongYan));
         return result;
     }
 }

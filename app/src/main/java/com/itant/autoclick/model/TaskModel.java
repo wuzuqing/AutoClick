@@ -24,6 +24,13 @@ public class TaskModel {
     private Map<String,PointModel> mapData;
     private int count;
 
+    public TaskModel() {
+    }
+
+    public TaskModel(String name) {
+        this.name = name;
+    }
+
     public int getCount() {
         return count;
     }

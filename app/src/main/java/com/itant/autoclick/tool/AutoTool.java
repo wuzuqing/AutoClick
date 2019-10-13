@@ -73,10 +73,7 @@ public class AutoTool {
 
     }
     public static void execShellCmd(Rect model) {
-        float x = model.width*1f/360;
-        float y = model.height*1f/640;
-        execShellCmd(CmdData.clickFloat(x, y));
-
+       execShellCmdXy(model.x+model.width/2 ,model.y+model.height/2);
     }
 
     public static void execShellCmdXy(int x, int y) {
@@ -84,6 +81,14 @@ public class AutoTool {
 //            execShellCmd(CmdData.click(model.getFloatX(), model.getFloatY()));
         } else {
             execShellCmd(CmdData.clickInt(x, y));
+        }
+
+    }
+    public static void execShellCmdXy(Rect rect) {
+        if (usedFloatRatio) {
+//            execShellCmd(CmdData.click(model.getFloatX(), model.getFloatY()));
+        } else {
+            execShellCmd(CmdData.clickInt(rect.x+rect.width/2, rect.y + rect.height/2));
         }
 
     }
