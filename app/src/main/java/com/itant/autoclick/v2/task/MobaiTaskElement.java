@@ -1,5 +1,8 @@
 package com.itant.autoclick.v2.task;
 
+import android.os.Handler;
+import android.util.Log;
+
 import com.example.module_orc.ignore.BenfubangdanIgnoreRect;
 import com.itant.autoclick.activity.BaseApplication;
 import com.itant.autoclick.model.PointModel;
@@ -23,6 +26,15 @@ public class MobaiTaskElement extends AbsTaskElement {
     PointModel huangGongClose = CmdData.get(HUANG_GONG_CLOSE);
     private int status;
 
+    private boolean isWait;
+    private int step = 0;
+
+    @Override
+    public void bindHandler(Handler handler) {
+        super.bindHandler(handler);
+        step = 0;
+    }
+
     @Override
     protected boolean doTask() throws Exception {
         pageData = Util.getBitmapAndPageData();
@@ -33,8 +45,9 @@ public class MobaiTaskElement extends AbsTaskElement {
             AutoTool.execShellCmdChuFu();
             Thread.sleep(1800);
             return false;
-        } else if (checkPage("府外")) {
+        } else if (checkPage("府外") && step==0) {
             doBenfuBangDan = false;
+            step = 1;
             AutoTool.execShellCmd(CmdData.swipe(BaseApplication.getScreenWidth() - 50, 50));
             Thread.sleep(600);
             AutoTool.execShellCmd(CmdData.swipe(300, 600));
@@ -42,7 +55,7 @@ public class MobaiTaskElement extends AbsTaskElement {
             AutoTool.execShellCmd(paiHang);
             Thread.sleep(800);
             return false;
-        } else if (checkPage("排行榜")) {
+        } else if (checkPage("排行榜") && step == 1) {
             if (doBenfuBangDan) {
                 status = 0;
                 AutoTool.execShellCmd(bangDanKuaFu);
@@ -50,58 +63,61 @@ public class MobaiTaskElement extends AbsTaskElement {
                 status = 0;
                 AutoTool.execShellCmd(bangDanSelf);
             }
+            step = 2;
             Thread.sleep(1000);
 
-        } else if (checkPage("本服榜单") || checkPage("跨服榜单")) {
-            Rect moBai = BenfubangdanIgnoreRect.moBai;
+        } else if (step==2 && ( checkPage("本服榜单") || checkPage("跨服榜单"))) {
+            Rect moBai = BenfubangdanIgnoreRect.moBaiMax;
             Rect target;
             while (true) {
                 target = pageData.get(0).getRect();   // 膜拜
+                Log.d(TAG, "doTask: target:"+target.toString() + " moBai:"+moBai.toString() + " status:"+status);
                 if (status == 0) {
-                    if (target.equals(moBai)) {
+                    if (checkMobai(moBai, target)) {
+                        Thread.sleep(800);
                         AutoTool.execShellCmd(moBai);
-                        Thread.sleep(1500);
+                        Thread.sleep(3500);
                         AutoTool.execShellCmd(moBai);
-                        Thread.sleep(1200);
+                        Thread.sleep(800);
                         AutoTool.execShellCmd(moBai);
-                        Thread.sleep(1200);
+                        Thread.sleep(800);
                     } else {
                         target = pageData.get(1).getRect();
                         AutoTool.execShellCmdXy(target.x, target.y);
                         status = 1;
-                        Thread.sleep(1200);
+                        Thread.sleep(2000);
                     }
                 } else if (status == 1) {
-                    if (target.equals(moBai)) {
+                    if (target.width == moBai.width && target.height == moBai.height && target.x ==moBai.x) {
+                        Thread.sleep(800);
                         AutoTool.execShellCmd(moBai);
-                        Thread.sleep(1500);
+                        Thread.sleep(3500);
                         AutoTool.execShellCmd(moBai);
-                        Thread.sleep(1200);
+                        Thread.sleep(800);
                         AutoTool.execShellCmd(moBai);
-                        Thread.sleep(1200);
+                        Thread.sleep(800);
                     } else {
                         target = pageData.get(2).getRect();
                         AutoTool.execShellCmdXy(target.x, target.y);
                         status = 2;
-                        Thread.sleep(1200);
+                        Thread.sleep(2000);
                     }
                 } else if (status == 2) {
-                    if (target.equals(moBai)) {
+                    if (target.width == moBai.width && target.height == moBai.height && target.x ==moBai.x) {
+                        Thread.sleep(800);
                         AutoTool.execShellCmd(moBai);
-                        Thread.sleep(1500);
+                        Thread.sleep(3500);
                         AutoTool.execShellCmd(moBai);
-                        Thread.sleep(1200);
+                        Thread.sleep(800);
+                        AutoTool.execShellCmd(moBai);
+                        Thread.sleep(800);
                     } else {
                         if (!doBenfuBangDan) {
                             AutoTool.execShellCmd(huangGongClose);
                             Thread.sleep(1200);
                             doBenfuBangDan = true;
+                            step = 1;
                             return false;
-//                            AutoTool.execShellCmd(huangGongClose);
-//                            Thread.sleep(1200);
-//                            AutoTool.execShellCmd(huangGongClose);
-//                            Thread.sleep(800);
-//                            return true;
                         } else {
                             AutoTool.execShellCmd(huangGongClose);
                             Thread.sleep(1200);
@@ -118,9 +134,14 @@ public class MobaiTaskElement extends AbsTaskElement {
                 resetStep();
                 return true;
             }
+            AutoTool.execShellCmdXy(540,20);
             Thread.sleep(200);
             return false;
         }
         return false;
+    }
+
+    private boolean checkMobai(Rect moBai, Rect target) {
+        return target.width == moBai.width && target.height == moBai.height && target.x ==moBai.x;
     }
 }

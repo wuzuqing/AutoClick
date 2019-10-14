@@ -50,6 +50,7 @@ public class RequestPermissionsActivity extends AppCompatActivity {
             finish();
         } else {
             MainService.start(RequestPermissionsActivity.this);
+            finish();
         }
 
     }

@@ -105,7 +105,7 @@ public class TaskState implements Constant {
     public static boolean check(int failCount, int maxCount) {
         boolean check = failCount > maxCount;
         needContinue = check;
-        TaskUtil.failCount++;
+        TaskState.failCount++;
         return check;
     }
 }

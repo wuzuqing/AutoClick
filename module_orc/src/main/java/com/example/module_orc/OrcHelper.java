@@ -3,7 +3,6 @@ package com.example.module_orc;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -45,7 +44,8 @@ public class OrcHelper {
     private OrcHelper() {
         mExecutor = Executors.newCachedThreadPool();
         vHandler = new Handler(Looper.getMainLooper());
-        boolean isMoble = Build.BRAND.toUpperCase().contains("Oppo".toUpperCase());
+        boolean isMoble = true;
+//        boolean isMoble = Build.BRAND.toUpperCase().contains("Oppo".toUpperCase());
         File directory = Environment.getExternalStoragePublicDirectory(isMoble ? Environment.DIRECTORY_DCIM : Environment.DIRECTORY_MOVIES);
         rootDir = new File(directory, isMoble ? "/Screenshots" : "/image");
 
