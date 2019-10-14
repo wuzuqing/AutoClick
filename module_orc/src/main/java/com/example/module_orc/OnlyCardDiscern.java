@@ -153,10 +153,11 @@ public class OnlyCardDiscern implements Runnable {
                     model.setBitmap(bitmap);
                     String value = OrcHelper.getInstance().orcText(bitmap, "small");
                     Rect modelRect = model.getRect().clone();
-                    modelRect.x *=3;
-                    modelRect.y *=3;
-                    modelRect.width *=3;
-                    modelRect.height *=3;
+                    int topColorXishu = OrcConfig. topColorXishu;
+                    modelRect.x *=topColorXishu;
+                    modelRect.y *=topColorXishu;
+                    modelRect.width *=topColorXishu;
+                    modelRect.height *=topColorXishu;
                     model.setRect(modelRect);
                     model.setResult(value);
                 }catch (Exception e){

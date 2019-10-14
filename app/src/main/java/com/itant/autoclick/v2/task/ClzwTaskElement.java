@@ -6,8 +6,6 @@ import com.itant.autoclick.tool.AutoTool;
 import com.itant.autoclick.util.Util;
 import com.itant.autoclick.v2.AbsTaskElement;
 
-import static com.itant.autoclick.util.TaskUtil.netPoint;
-
 public class ClzwTaskElement extends AbsTaskElement {
     public ClzwTaskElement(TaskModel taskModel) {
         super(taskModel);
@@ -39,7 +37,7 @@ public class ClzwTaskElement extends AbsTaskElement {
             return false;
         }
         for (OrcModel model : pageData) {
-            if (model.getResult().startsWith("获得(")){
+            if (model.getResult().startsWith("获得")){
                 AutoTool.execShellCmd(model.getRect());
                 Thread.sleep(700);
                 return false;

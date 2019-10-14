@@ -50,7 +50,7 @@ public class JoinGameTaskElement extends AbsTaskElement {
         while (TaskState.isWorking) {                           //检查 通告对话框的环境
             pageData = Util.getBitmapAndPageData();
             if (checkPage("游戏公告")) {
-                AutoTool.execShellCmd(pageData.get(1).getRect());  //关闭通告对话框
+                AutoTool.execShellCmdXy(pageData.get(1).getRect().x,pageData.get(1).getRect().y);  //关闭通告对话框
                 break;
             } else if (check(8)) {
                 resetStep();
