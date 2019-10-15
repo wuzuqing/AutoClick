@@ -3,7 +3,7 @@ package com.itant.autoclick.util;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 
-import com.example.module_orc.OrcHelper;
+import com.example.module_orc.OrcConfig;
 import com.example.module_orc.OrcModel;
 import com.itant.autoclick.Constant;
 import com.itant.autoclick.activity.BaseApplication;
@@ -1700,41 +1700,56 @@ public class TaskUtil implements Constant {
         AutoTool.execShellCmdClose();
         Thread.sleep(isNewApi ? 1200 : 1000);
     }
+    public static boolean checkPage(  List<OrcModel> pageData, String currentPage) {
+        return TextUtils.equals(currentPage,OrcConfig.pageName);
+    }
 
+    private static final String TAG = "TaskUtil";
     public static void oneTask(TaskModel task) throws InterruptedException { //2
-        final List<PointModel> pointModels = task.getData();
         int count = 0;
-        PointModel huaAn = CmdData.get(HUA_AN);
+        List<OrcModel> pageData;
         PointModel zhengShou = CmdData.get(ZHENG_SHOU);
-        AutoTool.execShellCmd(huaAn);                               //点击华安进入收菜界面
-        Thread.sleep(BaseApplication.densityDpi == 480 ? 2500 : 1200);
         isEnd = false;
         resetFail();
-        while (true) {
-            if (isDestory) return;
-            Util.getCapBitmapNew();
+        while (!isDestory) {
+            pageData = Util.getBitmapAndPageData();
+
             if (checkExp(netPoint, "当前网络异常")) continue;//检查网络环境
             if (checkExp(dialogClose3, "关闭道具框")) continue;//检查网络环境
             if (isDestory) return;
             if (check(failCount, 20)) break;
+            if (checkPage(pageData, "府内")) {
+                AutoTool.execShellCmd(pageData.get(1).getRect());
+                Thread.sleep(BaseApplication.densityDpi == 480 ? 1200 : 1200);
+                continue;
+            } else if (!checkPage(pageData, "经营资产")) {
 
-            List<OrcModel> models = OrcHelper.getInstance().executeCallSync(TaskUtil.bitmap);
-
-
-
-            if (Util.checkColor(zhengShou)) {
-                AutoTool.execShellCmd(zhengShou);
-                Thread.sleep(1200);
-                AutoTool.execShellCmdClose();
-                Thread.sleep(BaseApplication.densityDpi == 480 ? 1800 : 800);
-                return;
+                continue;
+            }else if (checkPage(pageData,"道具使用")){
+                AutoTool.execShellCmd(pageData.get(1).getRect());
+                Thread.sleep(600);
+                continue;
             }
-            ImageParse.getSyncData(new ImageParse.Call() {
-                @Override
-                public void call(List<Result.ItemsBean> result) {
-                    isEnd = TaskUtil.getOneCount(result, pointModels);
+            count = 0;
+//            if (Util.checkColor(zhengShou)) {
+//                AutoTool.execShellCmd(zhengShou);
+//                Thread.sleep(1200);
+//                AutoTool.execShellCmdClose();
+//                Thread.sleep(BaseApplication.densityDpi == 480 ? 1800 : 800);
+//                return;
+//            }
+            for (OrcModel orcModel : pageData) {
+                if (TextUtils.equals("经营", orcModel.getResult())) {
+                    AutoTool.execShellCmd(orcModel.getRect());
+                    count++;
                 }
-            });
+            }
+
+            AutoTool.execShellCmd(zhengShou);
+            Thread.sleep(300);
+
+
+            isEnd = count == 0;
             if (isEnd) {
                 AutoTool.execShellCmdClose();
                 Thread.sleep(BaseApplication.densityDpi == 480 ? 1800 : 800);

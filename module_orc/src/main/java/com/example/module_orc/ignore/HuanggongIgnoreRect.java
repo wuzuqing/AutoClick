@@ -1,5 +1,6 @@
 package com.example.module_orc.ignore;
 
+import com.example.module_orc.OrcConfig;
 import com.example.module_orc.OrcModel;
 
 import org.opencv.core.Rect;
@@ -14,9 +15,11 @@ import java.util.List;
  * 说明：皇宫
  */
 public class HuanggongIgnoreRect implements IIgnoreRect {
+    public static final Rect bottom = new Rect(220, 595, 132, 27);
     @Override
     public List<OrcModel> ignoreRect(List<Rect> rects) {
         List<OrcModel> result = new ArrayList<>();
+        result.add(OrcConfig.append(new Rect(180,80,100,20)));
         return result;
     }
 }

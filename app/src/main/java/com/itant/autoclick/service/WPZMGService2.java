@@ -6,12 +6,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.text.TextUtils;
 
-import com.example.module_orc.IDiscernCallback;
-import com.example.module_orc.OrcHelper;
 import com.example.module_orc.OrcModel;
-import com.example.module_orc.WorkMode;
 import com.itant.autoclick.Constant;
 import com.itant.autoclick.activity.BaseApplication;
 import com.itant.autoclick.model.PointModel;
@@ -138,7 +134,7 @@ public class WPZMGService2 extends Service implements Constant {
         }
         return START_STICKY;
     }
-
+   private List<OrcModel> pageData;
     private class TaskThread implements Runnable {
         @Override
         public void run() {
@@ -174,7 +170,7 @@ public class WPZMGService2 extends Service implements Constant {
                 boolean hasGengXin = Util.checkHasGengXin();
 //                boolean hasGengXin = SPUtils.getBoolean(KEY_GENG_XIN);
                 boolean zhTask = SPUtils.getBoolean("zh");
-                Util.refreshNextDayTime();
+
                 int count = 0;
                 while (true) { //循环执行小号操作
 //                    SuUtil.kill();       //退出游戏
@@ -183,11 +179,11 @@ public class WPZMGService2 extends Service implements Constant {
                     // 009688
                     AutoClick.click(899, 1117);
                     Thread.sleep(1000);
-                    if (TaskUtil.bitmap != null && !TaskUtil.bitmap.isRecycled()) {
-                        TaskUtil.bitmap.recycle();
-                        TaskUtil.bitmap = null;
-                        System.gc();
-                    }
+//                    if (TaskUtil.bitmap != null && !TaskUtil.bitmap.isRecycled()) {
+//                        TaskUtil.bitmap.recycle();
+//                        TaskUtil.bitmap = null;
+//                        System.gc();
+//                    }
                     userInfo = userInfos.get(currentUserInfo % userInfos.size());
                     if (onlyFl) {
                         Util.lockFengLu(userInfo.getName(), "LOCK", "1", 5555);
@@ -202,63 +198,67 @@ public class WPZMGService2 extends Service implements Constant {
                     TaskUtil.resetFail();
                     while (true) {   //检查准备输入账号的环境
                         if (TaskUtil.isDestory) return;
-                        Util.getCapBitmapNew();
-                        if (Util.checkColor(loginClose) || TaskUtil.check(TaskUtil.failCount, 8))
+                        pageData = Util.getBitmapAndPageData();
+                        if (checkPage("登录") || TaskUtil.check(TaskUtil.failCount, 8)){
                             break;
+                        }
+//                        if (Util.checkColor(loginClose) || TaskUtil.check(TaskUtil.failCount, 8))
+//                            break;
                         Thread.sleep(600);
                     }
                     if (TaskUtil.needContinue) continue;
 
-                    if (onlyFl) {
-                        int userCount = 0;
-                        while (true) {
-                            if (!TextUtils.isEmpty(Util.getFengLuFileString(String.format("%s%s", userInfo.getName(), KEY_WORK_FL)))) {
-                                if (userCount == userInfos.size()) {
-                                    TaskUtil.isDestory = true;
-                                    LogUtils.logd(" task is over");
-                                    return;
-                                }
-                                currentUserInfo++;
-                                userInfo = userInfos.get(currentUserInfo % userInfos.size());
-                                LogUtils.logd("");
-                                userCount++;
-                                LogUtils.logd("userCount:" + userCount + " currentUserInfo:" + currentUserInfo + " userInfo:" + userInfo);
-                            } else {
-                                break;
-                            }
-                        }
-                    }
+//                    if (onlyFl) {
+//                        int userCount = 0;
+//                        while (true) {
+//                            if (!TextUtils.isEmpty(Util.getFengLuFileString(String.format("%s%s", userInfo.getName(), KEY_WORK_FL)))) {
+//                                if (userCount == userInfos.size()) {
+//                                    TaskUtil.isDestory = true;
+//                                    LogUtils.logd(" task is over");
+//                                    return;
+//                                }
+//                                currentUserInfo++;
+//                                userInfo = userInfos.get(currentUserInfo % userInfos.size());
+//                                LogUtils.logd("");
+//                                userCount++;
+//                                LogUtils.logd("userCount:" + userCount + " currentUserInfo:" + currentUserInfo + " userInfo:" + userInfo);
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//                    }
                     int length = 11;
                     Thread.sleep(200);
                     AutoTool.execShellCmd(length + 1, 112);
                     Thread.sleep(500);
                     AutoTool.execShellCmd(CmdData.inputTextUserInfoName + userInfo.getName()); //输入账号
                     Thread.sleep(BaseApplication.getScreenWidth() == 1080 ? 500 : 2500);
-                    AutoTool.execShellCmd(loginGame); //点击登录
+                    AutoTool.execShellCmd(pageData.get(0).getRect()); //点击登录
                     TaskUtil.sleep(1000);
                     TaskUtil.failCount = 0;
-                    while (hasGengXin) {               //检查进入游戏的环境
-                        if (TaskUtil.isDestory) return;
-                        LogUtils.logd("hasGengXin:" + hasGengXin);
-                        TaskUtil.sleep(2200);
-                        Util.getCapBitmapNew();
-                        if (Util.checkColor(genXin)) {
-                            AutoTool.execShellCmd(dialogClose2);  //维护公告
-                            Thread.sleep(TaskUtil.isNewApi ? 1200 : 600);
-                            break;
-                        } else if (Util.checkColor(startGame)) {
-                            break;
-                        }
-                        if (TaskUtil.check(TaskUtil.failCount, 12)) break;
-
-                    }
+//                    while (hasGengXin) {               //检查进入游戏的环境
+//                        if (TaskUtil.isDestory) return;
+//                        LogUtils.logd("hasGengXin:" + hasGengXin);
+//                        TaskUtil.sleep(2200);
+//                        Util.getCapBitmapNew();
+//                        if (Util.checkColor(genXin)) {
+//                            AutoTool.execShellCmd(dialogClose2);  //维护公告
+//                            Thread.sleep(TaskUtil.isNewApi ? 1200 : 600);
+//                            break;
+//                        } else if (Util.checkColor(startGame)) {
+//                            break;
+//                        }
+//                        if (TaskUtil.check(TaskUtil.failCount, 12)) break;
+//
+//                    }
                     if (TaskUtil.needContinue) continue;
                     while (true) {               //检查进入游戏的环境
                         if (TaskUtil.isDestory) return;
-                        Util.getCapBitmapNew();
-                        if (Util.checkColor(startGame)) {
-                            AutoTool.execShellCmd(startGame);  //进入游戏
-                            Thread.sleep(TaskUtil.isNewApi ? 4500 : 3000);
+
+                        pageData = Util.getBitmapAndPageData();
+                        if (checkPage("进入游戏")) {
+                            AutoTool.execShellCmd(pageData.get(0).getRect());  //进入游戏
+                            Thread.sleep(TaskUtil.isNewApi ? 2000 : 3000);
                             TaskUtil.failCount = 0;
                             break;
                         } else {
@@ -269,14 +269,16 @@ public class WPZMGService2 extends Service implements Constant {
 
                     while (true) {                           //检查 通告对话框的环境
                         if (TaskUtil.isDestory) return;
-
-                        Util.getCapBitmapNew();
-                        if (Util.checkColor(dialogClose2) || TaskUtil.check(TaskUtil.failCount, 8))
+                        pageData = Util.getBitmapAndPageData();
+                        if (checkPage("游戏公告")  || TaskUtil.check(TaskUtil.failCount, 8)) {
                             break;
+                        }
+//                        if (Util.checkColor(dialogClose2) || TaskUtil.check(TaskUtil.failCount, 8))
+//                            break;
                         TaskUtil.sleep(600);
                     }
                     if (TaskUtil.needContinue) continue;
-                    AutoTool.execShellCmd(dialogClose2);  //关闭通告对话框
+                    AutoTool.execShellCmd(pageData.get(1).getRect());  //关闭通告对话框
                     Thread.sleep(500);
                     if (userInfos.size() == 1) {
                         if (TaskUtil.isDestory) return;
@@ -309,13 +311,8 @@ public class WPZMGService2 extends Service implements Constant {
         }
     }
 
-    private void getPage() {
-        OrcHelper.getInstance().executeCallAsync(WorkMode.ONLY_BITMAP, TaskUtil.bitmap, "zwp", "1", new IDiscernCallback() {
-            @Override
-            public void call(final List<OrcModel> result) {
-                mHandler.sendMessage(mHandler.obtainMessage(SHOW_ORC_PAGE, result));
-            }
-        });
+    private boolean checkPage(String currentPage) {
+        return TaskUtil.checkPage(pageData,currentPage);
     }
 
     private void restart() {

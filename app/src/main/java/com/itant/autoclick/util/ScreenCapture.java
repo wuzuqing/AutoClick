@@ -154,7 +154,7 @@ public class ScreenCapture {
 
     private void createImageReader() {
         try {
-            mImageReader = ImageReader.newInstance(mScreenWidth, mScreenHeight, PixelFormat.RGBA_8888, 1);
+            mImageReader = ImageReader.newInstance(mScreenWidth, mScreenHeight, PixelFormat.RGBA_8888, 2);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -200,7 +200,7 @@ public class ScreenCapture {
             } else {
                 try {
                     Thread.sleep(time);
-                    getBitmap(image);
+                    mCurrentBitmap =  getBitmap(image);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -331,6 +331,10 @@ public class ScreenCapture {
         return  TaskUtil. bitmap ;
     }
 
+    private Bitmap mCurrentBitmap;
+    public Bitmap getCurrentBitmap() {
+        return mCurrentBitmap;
+    }
     public static byte[] getBitmapByte(Bitmap bitmap) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 10, out);
@@ -345,7 +349,7 @@ public class ScreenCapture {
 
     public static Bitmap getBitmap() {
         if (TaskUtil.bitmap!=null){
-            getPage();
+//            getPage();
         }
         return  TaskUtil. bitmap ;
     }

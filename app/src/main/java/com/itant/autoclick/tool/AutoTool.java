@@ -4,6 +4,8 @@ import com.itant.autoclick.model.PointModel;
 import com.itant.autoclick.util.CmdData;
 import com.itant.autoclick.util.LogUtils;
 
+import org.opencv.core.Rect;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.OutputStream;
@@ -70,12 +72,23 @@ public class AutoTool {
         }
 
     }
+    public static void execShellCmd(Rect model) {
+       execShellCmdXy(model.x+model.width/2 ,model.y+model.height/2);
+    }
 
     public static void execShellCmdXy(int x, int y) {
         if (usedFloatRatio) {
 //            execShellCmd(CmdData.click(model.getFloatX(), model.getFloatY()));
         } else {
             execShellCmd(CmdData.clickInt(x, y));
+        }
+
+    }
+    public static void execShellCmdXy(Rect rect) {
+        if (usedFloatRatio) {
+//            execShellCmd(CmdData.click(model.getFloatX(), model.getFloatY()));
+        } else {
+            execShellCmd(CmdData.clickInt(rect.x+rect.width/2, rect.y + rect.height/2));
         }
 
     }

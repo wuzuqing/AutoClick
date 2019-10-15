@@ -71,6 +71,7 @@
 
         <service android:name=".service.MainService"/>
         <service android:name=".service.WPZMGService2"/>
+        <service android:name=".service.WPZMGService3"/>
         <service android:name=".service.ScreenService"/>
 
 
@@ -93,7 +94,9 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>-->
-
+        <activity
+            android:name=".activity.RequestPermissionsActivity"
+            android:theme="@style/FullTr" />
     </application>
 
 </manifest>

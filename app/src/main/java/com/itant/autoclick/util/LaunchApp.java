@@ -42,6 +42,12 @@ public class LaunchApp {
 
     public static  String APP_PACKAGE_NAME = "com.tencent.mobileqq";
 
+
+    public static void launchApp(){
+        LaunchApp.launchapp(BaseApplication.getAppContext(), LaunchApp.JPZMG_PACKAGE_NAME);    //启动游戏
+    }
+
+
     //跳转页面的方法
     public static void launchapp(Context context) {
        launchapp(context,APP_PACKAGE_NAME);
@@ -53,7 +59,7 @@ public class LaunchApp {
             packageName1 = packageName;
         }
         APP_PACKAGE_NAME = packageName1;
-
+        Log.d(TAG, "launchapp: "+packageName1);
         LoadingActivity.launch(context, packageName1, 0);
     }
 

@@ -3,9 +3,9 @@ package io.virtualapp.splash;
 import android.os.Bundle;
 import android.view.WindowManager;
 
+import com.itant.autoclick.R;
 import com.lody.virtual.client.core.VirtualCore;
 
-import com.itant.autoclick.R;
 import io.virtualapp.VCommends;
 import io.virtualapp.abs.ui.VActivity;
 import io.virtualapp.abs.ui.VUiKit;
@@ -38,6 +38,8 @@ public class SplashActivity extends VActivity {
             }
         }).done((res) -> {
             HomeActivity.goHome(this);
+//            startActivity(new Intent(this, RequestPermissionsActivity.class));
+//            LaunchApp.launchapp(this,LaunchApp.JPZMG_PACKAGE_NAME);
             finish();
         });
     }

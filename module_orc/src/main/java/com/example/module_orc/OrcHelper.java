@@ -3,12 +3,12 @@ package com.example.module_orc;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.example.module_orc.util.GsonUtils;
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -32,6 +32,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class OrcHelper {
+    private static final String TAG = "OrcHelper";
     private static OrcHelper instance = new OrcHelper();
     private TessBaseAPI baseApi;
 
@@ -43,9 +44,11 @@ public class OrcHelper {
     private OrcHelper() {
         mExecutor = Executors.newCachedThreadPool();
         vHandler = new Handler(Looper.getMainLooper());
-        boolean isMoble = Build.BRAND.toUpperCase().contains("Oppo".toUpperCase());
+        boolean isMoble = true;
+//        boolean isMoble = Build.BRAND.toUpperCase().contains("Oppo".toUpperCase());
         File directory = Environment.getExternalStoragePublicDirectory(isMoble ? Environment.DIRECTORY_DCIM : Environment.DIRECTORY_MOVIES);
         rootDir = new File(directory, isMoble ? "/Screenshots" : "/image");
+
     }
 
     public File getTargetFile(String target) {
@@ -76,7 +79,9 @@ public class OrcHelper {
         cacheDir = context.getExternalCacheDir().getAbsolutePath();
         OrcConfig.initFirst();
         DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-        OrcConfig.resetScreenSize(metrics.widthPixels,metrics.heightPixels);
+        OrcConfig.resetScreenSize(metrics.widthPixels, metrics.heightPixels);
+        copyLanguagePackageToSDCard("zwp");
+        copyLanguagePackageToSDCard("small");
     }
 
     private String copyLanguagePackageToSDCard(String langName) {
@@ -89,8 +94,8 @@ public class OrcHelper {
         String filePath = dirPath + "/" + langName + ".traineddata";
         File file = new File(filePath);
         if (file.exists()) {
-           return file.getAbsolutePath();
-//            file.delete();
+            return file.getAbsolutePath();
+//                        file.delete();
         }
         InputStream inputStream = null;
         try {
@@ -110,23 +115,22 @@ public class OrcHelper {
         return file.getAbsolutePath();
     }
 
+    private Map<String, TessBaseAPI> apis = new HashMap<>();
+
     /**
      * 对要识别的图像进行识别
      *
      * @param bitmap 要识别的bitmap
      */
     public String orcText(Bitmap bitmap, String langName) {
-        copyLanguagePackageToSDCard(langName);
+//        copyLanguagePackageToSDCard(langName);
         String result;
+        TessBaseAPI baseApi = apis.get(langName);
         if (baseApi == null) {
             baseApi = new TessBaseAPI();
             baseApi.setDebug(true);
             baseApi.init(cacheDir, langName);
-        } else {
-            if (!langName.equals(baseApi.getInitLanguagesAsString())) {
-                baseApi.end();
-                baseApi.init(cacheDir, langName);
-            }
+            apis.put(langName, baseApi);
         }
         baseApi.setImage(bitmap);
         //        baseApi.setVariable("tessedit_char_whitelist", "0123456789X");
@@ -165,8 +169,8 @@ public class OrcHelper {
         }
     }
 
-    public  List<OrcModel> executeCallSync( final Bitmap bitmap){
-        final List<OrcModel> result  = new ArrayList<>();
+    public List<OrcModel> executeCallSync(final Bitmap bitmap) {
+        final List<OrcModel> result = new ArrayList<>();
         OnlyCardDiscern discern = new OnlyCardDiscern(bitmap, "zwp", "", new IDiscernCallback() {
             @Override
             public void call(List<OrcModel> item) {
@@ -214,7 +218,7 @@ public class OrcHelper {
      * 压缩文件
      */
     public void compress(File dir) {
-        System.out.println("compress 1");
+        Log.e(TAG, "compress 1");
         dir = new File(dir, "/other1");
         if (dir == null || !dir.isDirectory()) {
             return;
@@ -223,14 +227,14 @@ public class OrcHelper {
         if (files == null || files.length == 0) {
             return;
         }
-        System.out.println("compress 2" + files.length);
+        Log.e(TAG, "compress 2" + files.length);
         Mat gray = new Mat();
         int xishu = 6;
         long start = 0;
         Map<String, String> data = new HashMap<>();
         for (File file : files) {
             String name = file.getName();
-            System.out.println("compress 3" + name);
+            Log.e(TAG, "compress 3" + name);
             if (file.isDirectory()) {
                 continue;
             }
@@ -244,13 +248,13 @@ public class OrcHelper {
 
             Imgproc.resize(gray, gray, OrcConfig.compressScreenSize);
 
-//            Imgcodecs.imwrite(new File(OrcHelper.getInstance().rootDir + "/scale", name.substring(0, name.indexOf(".")) + ".jpg").getAbsolutePath(), gray);
+            //            Imgcodecs.imwrite(new File(OrcHelper.getInstance().rootDir + "/scale", name.substring(0, name.indexOf(".")) + ".jpg").getAbsolutePath(), gray);
             Mat crop = new Mat(gray, OrcConfig.titleMidRect);
             String sign = OrcConfig.getSign(crop);
             File file1 = new File(OrcHelper.getInstance().rootDir + "/mid", "mid_" + name.substring(0, name.indexOf(".")) + ".jpg");
             data.put(sign, file1.getName());
             Imgcodecs.imwrite(file1.getAbsolutePath(), crop);
-            System.out.println("used:" + (System.currentTimeMillis() - start) + " name:" + name);
+            Log.e(TAG, "used:" + (System.currentTimeMillis() - start) + " name:" + name);
         }
         try {
             File dataFile = new File(OrcHelper.getInstance().rootDir + "/mid", "data.txt");
@@ -277,7 +281,7 @@ public class OrcHelper {
         if (files == null || files.length == 0) {
             return;
         }
-        System.out.println("compress 2" + files.length);
+        Log.e(TAG, "compress 2" + files.length);
         Rect rectCurrent = OrcConfig.titleMidRectCurrent;
         int x = rectCurrent.x;
         int y = rectCurrent.y;
@@ -285,7 +289,7 @@ public class OrcHelper {
         int height = rectCurrent.height;
         for (File file : files) {
             String name = file.getName();
-            System.out.println("compress 3" + name);
+            Log.e(TAG, "compress 3" + name);
             if (file.isDirectory()) {
                 continue;
             }

@@ -32,7 +32,7 @@ public class DialogActivity extends NoAnimatorActivity implements Constant {
     private EditText etYanHuiNumber;
     private EditText etUserInfo;
     private CheckBox cbGx,cbKfJl,cbLoop,cbZw,cbOnlyFl, cbZh,cbFl, cbMb, cbTask, cbChouCai, cbGuanKa, cbShuYuan,
-            cbYanHui, cbZc, cbXs, cbCJ, cbOldShouCai,cbYx,cbLm,cbLmFb,cbGy,cbLf,cbYm,cbKfMb;
+            cbYanHui, cbZc, cbXs, cbCJ, cbOldShouCai,cbYx,cbLm,cbLmFb,cbGy,cbLf,cbYm;
     boolean isTy;
     private CheckBox cbHyzh;
 
@@ -49,7 +49,6 @@ public class DialogActivity extends NoAnimatorActivity implements Constant {
         cbChouCai =  findViewById(R.id.cb_shoucai);
         cbYm =  findViewById(R.id.cb_ym);
         cbZw =  findViewById(R.id.cb_zw);
-        cbKfMb =  findViewById(R.id.cb_kf_bo);
         cbFl =  findViewById(R.id.cb_fl);
         cbOnlyFl =  findViewById(R.id.cb_fl_only);
         cbMb =  findViewById(R.id.cb_mb);
@@ -83,7 +82,6 @@ public class DialogActivity extends NoAnimatorActivity implements Constant {
         cbFl.setChecked(SPUtils.getBoolean(KEY_WORK_FL));
         cbOnlyFl.setChecked(SPUtils.getBoolean(KEY_WORK_ONLY_FL));
         cbMb.setChecked(SPUtils.getBoolean(KEY_WORK_MB));
-        cbKfMb.setChecked(SPUtils.getBoolean(KEY_MO_BAI_KUA_FU));
         cbTask.setChecked(SPUtils.getBoolean(KEY_WORK_TASK));
         cbChouCai.setChecked(SPUtils.getBoolean(KEY_CHOU_CAI));
         cbZh.setChecked(SPUtils.getBoolean("zh"));
@@ -125,10 +123,9 @@ public class DialogActivity extends NoAnimatorActivity implements Constant {
             }
             SPUtils.setBoolean(KEY_WORK_ZW, cbZw.isChecked());
             SPUtils.setBoolean(KEY_KUA_FU_JL, cbKfJl.isChecked());
-            SPUtils.setBoolean(KEY_MO_BAI_KUA_FU, cbKfMb.isChecked());
             SPUtils.setString(KEY_YAN_HUI_NUMBER, etYanHuiNumber.getText().toString());
 
-            SPUtils.setBoolean(KEY_WORK_MB,false);
+            SPUtils.setBoolean(KEY_WORK_MB,cbMb.isChecked());
             SPUtils.setBoolean(KEY_WORK_TASK, cbTask.isChecked());
             SPUtils.setBoolean(KEY_CHOU_CAI, cbChouCai.isChecked());
             SPUtils.setBoolean(KEY_GUAN_KA, cbGuanKa.isChecked());
